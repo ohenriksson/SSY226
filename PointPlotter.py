@@ -55,5 +55,5 @@ class PointPlotter:
 
 
 
-pp = PointPlotter("layout.txt")
+pp = PointPlotter("~/Documents/layout.txt")
 pp.plot()
