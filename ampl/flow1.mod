@@ -2,13 +2,21 @@
 # k in {0..T}
 #  y0 --x1--> y1 --x2--> y2
 
+<<<<<<< HEAD
 param T = 8-1 integer;
+=======
+param T = 10 integer;
+>>>>>>> 12712423cf402b8eb9431eb104dbd6b26b704cc5
 param Tau1 = 2;
 param Tau2 = 3;
 
 
 param E = 2; #no of edges
+<<<<<<< HEAD
 param Nmax = 2; #no of agvs
+=======
+param Nmax = 1; #no of agvs
+>>>>>>> 12712423cf402b8eb9431eb104dbd6b26b704cc5
 param edgeCap = 1;
 
 var x1 {0..T} integer; #edge 1
@@ -35,7 +43,11 @@ cap2 {k in 0..T}: 0 <= x2[k] <= edgeCap;
 
 #complete travel before T
 travelcomplete1 {k in T-Tau1+1..T}: x1[k] = 0;
+<<<<<<< HEAD
 travelcomplete2 {k in T-Tau2+2..T}: x2[k] = 0;
+=======
+travelcomplete2 {k in T-Tau2+1..T}: x2[k] = 0;
+>>>>>>> 12712423cf402b8eb9431eb104dbd6b26b704cc5
 
 #what flows out from the source has to flow into the sink
 endFlow: sum{k in 0..T} (y0[k]-y2[k]) = 0;

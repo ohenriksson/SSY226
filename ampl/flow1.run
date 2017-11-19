@@ -1,10 +1,19 @@
 reset;
 option solver cplex;
+<<<<<<< HEAD
 model flow_general.mod;
 #model flow1.mod;
+=======
+model flow1_general.mod;
+>>>>>>> 12712423cf402b8eb9431eb104dbd6b26b704cc5
 #data flow1.dat;
 solve;
 option display_1col 5;
 option display_round 1;
 
+<<<<<<< HEAD
 display X;
+=======
+display x1;
+display x2;
+>>>>>>> 12712423cf402b8eb9431eb104dbd6b26b704cc5
