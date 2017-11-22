@@ -1,0 +1,18 @@
+reset;
+option solver cplex;
+model test.mod;
+data flow1.dat;
+solve;
+option display_1col 5;
+option display_round 1;
+
+display NODES;
+display src;
+display snk;
+display INT_NODES;
+display sink;
+display inter;
+display source;
+display X;
+
+
