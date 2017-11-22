@@ -1,12 +1,14 @@
-import matplotlib
 import matplotlib.pyplot as plt
+from matplotlib import collections
 
 
 class PointPlotter:
 
+    points_id = []
     points = []
     segments = []
-    def __init__(self ,filename):
+
+    def __init__(self, filename):
         self.filename = filename
         self.main()
 
@@ -35,25 +37,32 @@ class PointPlotter:
         else:
             return False
 
-    def read_point(self ,arrayPoint):
-        point = [arrayPoint[2] ,arrayPoint[3]]
+    def read_point(self, arrayPoint):
+        point_id = arrayPoint[1]
+        point = [arrayPoint[2], arrayPoint[3]]
+        self.points_id.append(point_id)
         self.points.append(point)
 
+    def read_segment(self, arraySegment):  # not complete
+        segment = [arraySegment[2], arraySegment[3]]
+        coords = []
+        for i in segment:
+            index = self.points_id.index(i)
+            coords.append((self.points[index][0], self.points[index][1]))
 
-    def read_segment(self ,arraySegment):  # not complete
-        segment = [arraySegment[2] ,arraySegment[3]]
-        self.segments.append(segment)
+        self.segments.append(coords)
 
     def plot(self):
         fig, ax = plt.subplots()
         x = [x[0] for x in self.points]
         y = [x[1] for x in self.points]
+        line_segments = collections.LineCollection(self.segments, colors='grey', linewidths=0.5)
         ax.scatter(x, y)
+        ax.add_collection(line_segments)
         ax.grid()
         plt.show()
-        print(self.points)
+        #print(self.points)
 
-
-
-pp = PointPlotter("~/Documents/layout.txt")
+pp = PointPlotter("/home/oskar/Desktop/layout.txt")
 pp.plot()
+print(pp.segments)
