@@ -6,7 +6,9 @@ class PointPlotter:
 
     points_id = []
     points = []
-    segments = []
+    segment_ids = []
+    segment_coords = []
+    segment_distance = []
 
     def __init__(self, filename):
         self.filename = filename
@@ -37,32 +39,33 @@ class PointPlotter:
         else:
             return False
 
-    def read_point(self, arrayPoint):
-        point_id = arrayPoint[1]
-        point = [arrayPoint[2], arrayPoint[3]]
+    def read_point(self, array_point):
+        point_id = array_point[1]
+        point = [array_point[2], array_point[3]]
         self.points_id.append(point_id)
         self.points.append(point)
 
-    def read_segment(self, arraySegment):  # not complete
-        segment = [arraySegment[2], arraySegment[3]]
+    def read_segment(self, array_segment):
+        segment = [array_segment[2], array_segment[3]]
+
         coords = []
+        ids = []
         for i in segment:
             index = self.points_id.index(i)
             coords.append((self.points[index][0], self.points[index][1]))
+            ids.append(int(self.points_id[index]))
 
-        self.segments.append(coords)
+        self.segment_ids.append(ids)
+        self.segment_distance.append(array_segment[4])
+        self.segment_coords.append(coords)
 
     def plot(self):
         fig, ax = plt.subplots()
         x = [x[0] for x in self.points]
         y = [x[1] for x in self.points]
-        line_segments = collections.LineCollection(self.segments, colors='grey', linewidths=0.5)
+        line_segments = collections.LineCollection(self.segment_coords, colors='grey', linewidths=0.5)
         ax.scatter(x, y)
         ax.add_collection(line_segments)
         ax.grid()
         plt.show()
         #print(self.points)
-
-pp = PointPlotter("/home/oskar/Desktop/layout.txt")
-pp.plot()
-print(pp.segments)
