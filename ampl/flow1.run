@@ -1,6 +1,6 @@
 reset;
 option solver cplex;
-model flow_general.mod;
+model flow_general.mod.mod;
 data flow1.dat;
 solve;
 option display_1col 5;
