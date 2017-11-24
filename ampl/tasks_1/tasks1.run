@@ -1,0 +1,16 @@
+reset;
+option solver cplex;
+model tasks1.mod;
+data tasks1.dat;
+solve;
+option display_1col 5;
+option display_round 1;
+
+display NODES;
+display src;
+display snk;
+display INT_NODES;
+display sink;
+display inter;
+display source;
+display X;
