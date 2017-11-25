@@ -4,15 +4,15 @@ import numpy as np
 
 class AmplDataWriter:
 
-    bigNumber = 1000000;
     header = []
+    bigNumber = 1000000
     separator = " "
     TAUcomplete = ""
-    path = "/home/oskar/Desktop/"
+    path = "/home/oskar/Desktop/layout.txt"
 
     @classmethod
     def main(cls):
-        pp = PointPlotter(cls.path + "layout.txt")
+        pp = PointPlotter(cls.path)
         cls.aggrigate(pp)
         cls.print_to_file(cls.TAUcomplete)
 
@@ -21,7 +21,6 @@ class AmplDataWriter:
 
     @classmethod
     def aggrigate(cls,pp):
-
         nNodes = len(pp.points_id)
 
         header = ""
@@ -30,14 +29,12 @@ class AmplDataWriter:
         cls.header = header
         print(header)
 
-        TAU = np.ones([nNodes,nNodes])*cls.bigNumber;
+        TAU = np.ones([nNodes,nNodes])*cls.bigNumber
 
         for l,(i,j) in enumerate(pp.segment_ids):
             i1 = pp.points_id.index(str(i))
             i2 = pp.points_id.index(str(j))
             TAU[i1,i2] = pp.segment_distance[l]
-
-        #print(TAU[0:10,0:10])
 
         row1 = header + "\n"
         for l,i in enumerate(TAU):
@@ -46,7 +43,7 @@ class AmplDataWriter:
                 row1 += str(int(cell)) + cls.separator
             row1 += "\n"
         #print(row1)
-        cls.TAUcomplete = row1;
+        cls.TAUcomplete = row1
 
 
 
