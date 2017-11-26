@@ -1,0 +1,17 @@
+# Data
+
+param T = 10;
+param nrTask = 2;
+param nrNodes = 5;
+param nrAGVs = 2;
+param edgeCap = 1; 
+
+param: ARCS: TAU :=
+	0 2 2	1 2 3	2 3 3	2 4 4;
+
+param: LINK: TASK_ID :=
+	0 3 1	1 4 2;
+
+set SRC = 0,1;
+set SNK = 3,4;
+set INTER = 2;
