@@ -1,61 +1,56 @@
 from PointPlotter import PointPlotter
+from TaskReader import TaskReader
 import numpy as np
 
 
 class AmplDataWriter:
-
-    bigNumber = 1000000;
-    header = []
+    bigNumber = 1000000
     separator = " "
-    TAUcomplete = ""
-    path = "/home/oskar/Desktop/"
+
+    tau_complete = ""
+    tasks_complete = ""
+
+    input_tasks = "/home/oskar/Desktop/tasks.txt"
+    input_layout = "/home/oskar/Desktop/layout.txt"
+    output_ampl = "/home/oskar/Desktop/test_data.dat"
 
     @classmethod
     def main(cls):
-        pp = PointPlotter(cls.path + "layout.txt")
-        cls.aggrigate(pp)
-        cls.print_to_file(cls.TAUcomplete)
+        pp = PointPlotter(cls.input_layout)
+        tr = TaskReader(cls.input_tasks)
 
-        #pp.plot()
-        #print(pp.segment_coords)
+        cls.aggregate_nodes(pp)
+        cls.aggregate_tasks(tr)
+        cls.print_to_file(cls.tau_complete + cls.tasks_complete)
 
     @classmethod
-    def aggrigate(cls,pp):
-
+    def aggregate_nodes(cls, pp):
         nNodes = len(pp.points_id)
+        header = ''.join([str(i) + cls.separator for i in range(nNodes)])
 
-        header = ""
-        for i in range(nNodes):
-            header += str(i) + cls.separator
-        cls.header = header
-        print(header)
-
-        TAU = np.ones([nNodes,nNodes])*cls.bigNumber;
+        TAU = np.ones([nNodes,nNodes])*cls.bigNumber
 
         for l,(i,j) in enumerate(pp.segment_ids):
             i1 = pp.points_id.index(str(i))
             i2 = pp.points_id.index(str(j))
             TAU[i1,i2] = pp.segment_distance[l]
 
-        #print(TAU[0:10,0:10])
+        cls.tau_complete = header + "\n" + ''.join(
+            [str(l) + cls.separator + ''.join([str(int(cell)) + cls.separator for cell in i])
+             + '\n' for l, i in enumerate(TAU)])
 
-        row1 = header + "\n"
-        for l,i in enumerate(TAU):
-            row1 += str(l) + cls.separator
-            for cell in i:
-                row1 += str(int(cell)) + cls.separator
-            row1 += "\n"
-        #print(row1)
-        cls.TAUcomplete = row1;
-
-
+    @classmethod
+    def aggregate_tasks(cls, tr):
+        header = ''.join([str(i) + cls.separator for i in range(tr.tasks.__len__())])
+        tasks = ''.join([str(i) + cls.separator for i,j in tr.tasks])
+        cls.tasks_complete = header + '\n' + tasks
 
     @classmethod
     def print_to_file(cls,string):
-        f = open(cls.path + 'helloworld.txt','w')
+        f = open(cls.output_ampl,'w')
         f.write(string)
         f.close()
         return
 
-AmplDataWriter.main()
 
+AmplDataWriter.main()

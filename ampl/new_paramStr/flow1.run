@@ -1,0 +1,10 @@
+reset;
+option solver cplex;
+model flow_general.mod;
+data flow1.dat;
+solve;
+option display_1col 5;
+option display_round 1;
+
+display X;
+display Y;

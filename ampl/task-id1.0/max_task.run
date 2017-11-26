@@ -1,0 +1,10 @@
+reset;
+option solver cplex;
+model max_task.mod;
+data max_task.dat;
+solve;
+option display_1col 5;
+option display_round 1;
+
+display X;
+display Y;
