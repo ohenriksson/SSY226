@@ -1,4 +1,4 @@
-param T = 12 integer;
+param T = 10 integer;
 param Nodes = 3; #no of nodes
 param Nmax = 2; #no of agvs
 param edgeCap = 1; #agvs on each edge
@@ -14,6 +14,9 @@ set TIME = {0..T};
 
 set LINKS within {NODES,NODES};
 param TAU {LINKS};
+
+set LINKS1 within {NODES,NODES};
+param TAU1 {LINKS1};
 
 #travelling times
 var X {NODES,NODES,TIME}; # fromNode,toNode,time
