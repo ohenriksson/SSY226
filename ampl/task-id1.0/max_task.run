@@ -3,9 +3,10 @@ option solver cplex;
 model max_task.mod;
 data max_task.dat;
 solve;
-option display_1col 5;
-option display_round 1;
+option display_1col 0;
+#option display_round 0;
 
 display X;
 display Y;
-display SOURCE_TASK[3];
+
+display X > Xsol.out

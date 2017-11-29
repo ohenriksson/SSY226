@@ -9,6 +9,7 @@ class AmplDataWriter:
 
     tau_complete = ""
     tasks_complete = ""
+    allowed_tasks_complete = ""
 
     input_tasks = "/home/oskar/Desktop/tasks.txt"
     input_layout = "/home/oskar/Desktop/layout.txt"
@@ -21,7 +22,8 @@ class AmplDataWriter:
 
         cls.aggregate_nodes(pp)
         cls.aggregate_tasks(tr)
-        cls.print_to_file(cls.tau_complete + cls.tasks_complete)
+        cls.alowed_tasks_list(tr)
+        cls.print_to_file(cls.tau_complete + cls.tasks_complete + cls.allowed_tasks_complete)
 
     @classmethod
     def aggregate_nodes(cls, pp):
@@ -44,6 +46,12 @@ class AmplDataWriter:
         header = ''.join([str(i) + cls.separator for i in range(tr.tasks.__len__())])
         tasks = ''.join([str(i) + cls.separator for i,j in tr.tasks])
         cls.tasks_complete = header + '\n' + tasks
+
+    @classmethod
+    def allowed_tasks_list(cls,tr)
+        node_header = ''.join([str(i) + cls.separator for i in range(tr.tasks.__len__()])
+        tasks = [range()]
+        cls.tasks_complete = node_header + '\n' + tasks
 
     @classmethod
     def print_to_file(cls,string):
