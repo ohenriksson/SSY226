@@ -8,3 +8,4 @@ option display_round 1;
 
 display X;
 display Y;
+display SOURCE_TASK[3];
