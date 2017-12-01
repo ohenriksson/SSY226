@@ -8,7 +8,7 @@ param travelTask; # Task ID for travelling purpose between nodes.
 
 set NODES = {0..nrNodes}; 
 set TIME = {0..T}; 
-set TASK = {1..nrTask};
+set TASK = {travelTask..nrTask};
 
 set ARCS within {NODES,NODES}; # Pair of connecting nodes.
 
@@ -45,7 +45,7 @@ flowCtrl {k in TIME, v0 in INTER}:
 sum {t in TASK, (i,v0) in ARCS: k-TAU[i,v0] >=0} (X[i,v0,t,k-TAU[i,v0]]) = sum{(v0,j) in ARCS, t in TASK} (X[v0,j,t,k]);
 
 #continue with an ongoing task
-tasksMustGoOn {k in TIME, t in TASK, n in INTER, (i,n) in ARCS: k-TAU[i,n] >=0 and n != SINK_TASK[t]}:
+tasksMustGoOn {k in TIME, t in TASK, n in INTER, (i,n) in ARCS: t != travelTask and k-TAU[i,n] >=0 and n != SINK_TASK[t] and n != SOURCE_TASK[t]}:
 (X[i,n,t,k-TAU[i,n]]) = sum{(n,j) in ARCS} (X[n,j,t,k]);
 
 
@@ -55,7 +55,7 @@ source {k in TIME, (sr,sn) in LINK, t in TASK}:
 sum {(sr,j) in ARCS} (X[sr,j,t,k]) = Y[sr,t,k];
 
 # Inital flow for the AGVs.
-startUp {k in TIME, (startNode,src) in ARCS, (src,snk) in LINK}: X[startNode,src,TASK_ID[src,snk],k] = Y[src,TASK_ID[src,snk],k];
+#startUp {k in TIME, (startNode,src) in ARCS, (src,snk) in LINK}: X[startNode,src,TASK_ID[src,snk],k] = Y[src,TASK_ID[src,snk],k];
 
 # Restrict number of AGVs in the system.
 restrictAGVs: sum {k in TIME, (startNode,src) in ARCS, (src,snk) in LINK} (X[startNode,src,TASK_ID[src,snk],k]) <= nrAGVs;
@@ -65,7 +65,7 @@ travel {k in TIME, (i,j) in ARCS}:
 sum {k_win in k..k+TAU[i,j]-1, t in TASK: k_win <= T} (X[i,j,t,k_win]) <= 1;
 
 # Only allow the AGVs to do the task restricted to that source node
-AllowedTask {k in TIME, src in SRC, t in TASK: AT[t,src] == 0}: Y[src,t,k] = 0;
+AllowedTask {k in TIME, i in NODES, t in TASK: i != startNode and AT[t,i] == 0}: Y[i,t,k] = 0;
 
 # Restrict how many times a task is allowed to be done
 restrictTask {(src,snk) in LINK}: 0 <= sum {k in TIME} (Y[snk,TASK_ID[src,snk],k]) <= 1;
