@@ -1,0 +1,27 @@
+# Data
+
+param T = 8;
+
+#ntasks = tasks
+param nTasks = 1;
+param nrAGVs = 1;
+param travelTask = 0;
+
+#nrNodes = intermediate nodes + 2;
+param startNode = 0;
+param endNode = 3;
+param nrNodes = 4;
+param edgeCap = 1;
+
+#[start,dest,traveltime]
+param: ARCS: TAU :=
+	0 1 1
+	1 2 1
+	2 1 2
+	2 3 1;
+
+#[id,node]
+param: src_tasks :=
+1 2;
+param: snk_tasks :=
+1 1;
