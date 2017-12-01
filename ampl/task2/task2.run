@@ -1,0 +1,12 @@
+reset;
+option solver cplex;
+model task2.mod;
+data task2.dat;
+solve;
+option display_1col 0;
+#option display_round 0;
+
+display X;
+display Y;
+
+display X > Xsol.out
