@@ -1,7 +1,7 @@
 reset;
 option solver cplex;
-model max_task.mod;
-data max_task.dat;
+model max_task1.mod;
+data max_task1.dat;
 solve;
 option display_1col 0;
 #option display_round 0;
