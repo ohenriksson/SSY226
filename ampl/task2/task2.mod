@@ -53,17 +53,17 @@ taskMustBeDropped {k in TIME, t in TASKLIST, n in INTER: n == snk_tasks[t]}:
 sum {(n,j) in ARCS} X[n,j,t,k] = 0;
 
 # --agvs in the intermediate nodes at t=0
-nAGVs_interStart: sum{t in TASK, i in INTER} Y[i,t,0] = 0;
+# nAGVs_interStart: sum{t in TASK, i in INTER} Y[i,t,0] = 0;
 restrictAGVs: sum {k in TIME, (startNode,j) in ARCS, t in TASK} X[startNode,j,t,k] <= nrAGVs;
 
 
 #--arctravel num of AGVs travelling on an arc.
-travel {k in TIME, (i,j) in ARCS}:
-sum {k_win in k..k+TAU[i,j]-1, t in TASK: k_win <= T} (X[i,j,t,k_win]) <= edgeCap;
+# travel {k in TIME, (i,j) in ARCS}:
+# sum {k_win in k..k+TAU[i,j]-1, t in TASK: k_win <= T} (X[i,j,t,k_win]) <= edgeCap;
 
 restrictStartNodeTask: # (always use task 0 since it is not in tasklist)
 sum {k in TIME, t in TASKLIST, (startNode,j) in ARCS} X[startNode,j,t,k] = 0;
 
 
 # Restrict how many times a task is allowed to be done
-#restrictTask {(src,snk) in LINK}: 0 <= sum {k in TIME} (Y[snk,TASK_ID[src,snk],k]) <= 1;
+restrictTask {t in TASKLIST}: 0 <= sum {k in TIME} (Y[snk_tasks[t],t,k]) <= 1;
