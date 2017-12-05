@@ -3,12 +3,22 @@ from TaskReader import TaskReader
 import numpy as np
 import modelspec as ms
 from enum import Enum
+import random as rn
 
 class Dist(Enum):
     Euclidian = 'eucl',
     Zero = 0,
     Unit = 1,
 
+
+class Node:
+    counter = 0
+    def __init__(self):
+        self.number = int(Node.counter)
+        Node.counter += 1
+
+    def __str__(self):
+        return str(self.number)
 
 
 class Arc:
@@ -20,14 +30,19 @@ class Arc:
     def __str__(self):
         return str(self.start) +' ' +str(self.end) +' ' +str(int(np.divide(self.dist,ms.agv_velocity)))
 
-class Node:
-    counter = 0
-    def __init__(self):
-        self.number = int(Node.counter)
-        Node.counter += 1
+class Task:
+    counter = 1
+    def __init__(self,startNode:Node,endNode:Node):
+        self.sNode = startNode
+        self.eNode = endNode
+        self.index = Task.counter
+        Task.counter+= 1
 
-    def __str__(self):
-        return str(self.number)
+    def printStart(self) -> str:
+        return str(self.index) +' ' +str(self.sNode)
+
+    def printEnd(self) -> str:
+        return str(self.index) +' ' +str(self.eNode)
 
 
 class AmplDataWriter:
@@ -49,7 +64,9 @@ class AmplDataWriter:
         self.numberNodes = ms.pickup_stations + ms.place_stations + ms.intermidiate_nodes
 
         self.arcs = []
+        self.taskList = []
         self.generateLayout()
+        self.createAllTasks()
 
     def generateLayout(self):
         self.interLayers = []
@@ -67,12 +84,13 @@ class AmplDataWriter:
         setup += self.setParameter('endNode',str(self.masterSinkNode))
         setup += self.setParameter('T',str(ms.timeframe))
         setup += self.setParameter('nrAGVs',str(ms.n_agvs))
-        setup += self.setParameter('nTasks',ms.unique_tasks)
-        setup += self.setParameter('travelTask',0)
-        setup += self.setParameter('edgeCap',ms.edge_capacity)
+        setup += self.setParameter('nTasks',str(ms.unique_tasks))
+        setup += self.setParameter('travelTask',str(0))
+        setup += self.setParameter('edgeCap',str(ms.edge_capacity))
         arcs = self.setParameter('ARCS: TAU :','\n'.join([str(a) for a in self.arcs]))
-
-        config = setup + '\n' +arcs
+        task_src = self.setParameter('task_src :', '\n'.join(t.printStart() for t in self.taskList) )
+        task_snk = self.setParameter('task_snk :', '\n'.join(t.printEnd() for t in self.taskList) )
+        config = '\n'.join([setup,arcs,task_src,task_snk])
         self.print_to_file(filename,config)
 
     @staticmethod
@@ -109,6 +127,17 @@ class AmplDataWriter:
         x = np.divide(ms.delivery_distance,(ms.intermidiate_layers+1))
         y = np.abs(y1-y2)*ms.node_spacing_y
         return int(round(np.hypot(x,y),0))
+
+    def createAllTasks(self):
+         for t in range(ms.unique_tasks):
+             self.taskList.append(self.createATask())
+
+
+    def createATask(self)->Task:
+        start = rn.randint(1,ms.pickup_stations)
+        stop = rn.randint(0,ms.place_stations)
+        stop += self.placeNodes.__len__()
+        return Task(start,stop)
 
     @classmethod
     def main(cls):
