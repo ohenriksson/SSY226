@@ -2,15 +2,23 @@ from PointPlotter import PointPlotter
 from TaskReader import TaskReader
 import numpy as np
 import modelspec as ms
+from enum import Enum
+
+class Dist(Enum):
+    Euclidian = 'eucl',
+    Zero = 0,
+    Unit = 1,
+
+
 
 class Arc:
-    def __init__(self,startNode,endNode,length):
+    def __init__(self,startNode:int,endNode:int,length:int):
         self.start = startNode
         self.end = endNode
         self.dist = length
 
     def __str__(self):
-        return str(self.start) +' ' +str(self.end) +' ' +str(self.dist)
+        return str(self.start) +' ' +str(self.end) +' ' +str(int(np.divide(self.dist,ms.agv_velocity)))
 
 class Node:
     counter = 0
@@ -38,41 +46,69 @@ class AmplDataWriter:
     def __init__(self,use_modelspec:bool, path=""):
         self.use_modelspec = use_modelspec
         AmplDataWriter.path = path
-
-        self.numberOfIntermediate = ms.place_stations if ms.pickup_stations > ms.place_stations else ms.pickup_stations
-        self.numberNodes = ms.pickup_stations + ms.place_stations + self.numberOfIntermediate
+        self.numberNodes = ms.pickup_stations + ms.place_stations + ms.intermidiate_nodes
 
         self.arcs = []
         self.generateLayout()
 
     def generateLayout(self):
+        self.interLayers = []
         self.masterSourceNode = Node()
         self.pickupNodes = [Node() for i in range(ms.pickup_stations)]
-        self.interNodes = [Node() for i in range(self.numberOfIntermediate)]
+        for layers in range(ms.intermidiate_layers):
+            interNodes = [Node() for i in range(ms.intermidiate_nodes)]
+            self.interLayers.append(interNodes)
         self.placeNodes = [Node() for i in range(ms.place_stations)]
         self.masterSinkNode = Node()
         self.generateAllArcs()
 
     def writeDatFile(self,filename):
-        setup = "param startNode = " + str(self.masterSourceNode) + ";\n"
-        setup += "param endNode = " + str(self.masterSinkNode) + ";"
-        arcs = 'param: ARCS: TAU :=' + '\n'.join([str(a) for a in self.arcs]) +';\n'
+        setup = self.setParameter('startNode',str(self.masterSourceNode))
+        setup += self.setParameter('endNode',str(self.masterSinkNode))
+        setup += self.setParameter('T',str(ms.timeframe))
+        setup += self.setParameter('nrAGVs',str(ms.n_agvs))
+        setup += self.setParameter('nTasks',ms.unique_tasks)
+        setup += self.setParameter('travelTask',0)
+        setup += self.setParameter('edgeCap',ms.edge_capacity)
+        arcs = self.setParameter('ARCS: TAU :','\n'.join([str(a) for a in self.arcs]))
+
         config = setup + '\n' +arcs
         self.print_to_file(filename,config)
 
+    @staticmethod
+    def setParameter(parameter,value):
+        return 'param ' +parameter +' = ' +value +';\n'
+
     def generateAllArcs(self):
-        self.generateArcsBetween([self.masterSourceNode],self.pickupNodes,distance=0)
-        self.generateArcsBetween(self.pickupNodes,self.interNodes)
-        self.generateArcsBetween(self.interNodes,self.placeNodes)
-        self.generateArcsBetween(self.placeNodes,self.pickupNodes,distance=0)
-        self.generateArcsBetween(self.placeNodes,[self.masterSinkNode],distance=0)
+        self.generateArcsBetween([self.masterSourceNode],self.pickupNodes,distance=Dist.Zero)
 
-    def generateArcsBetween(self,nodeLayer1:[Node],nodeLayer2:[Node],distance=1,bidirectional=False):
-        for n1 in nodeLayer1:
-            for n2 in nodeLayer2:
-                self.arcs.append(Arc(n1,n2,distance))
-                if bidirectional: self.arcs.append(Arc(n1,n2))
+        for (index,layer) in enumerate(self.interLayers):
+            if index == 0:
+                self.generateArcsBetween(self.pickupNodes,layer,distance=Dist.Euclidian)
+            elif index == self.interLayers.__len__() -1:
+                self.generateArcsBetween(self.interNodes,self.placeNodes,distance=Dist.Euclidian)
+            else:
+                self.generateArcsBetween(self.interLayers[index-1],layer)
 
+        self.generateArcsBetween(self.placeNodes,[self.masterSinkNode],distance=Dist.Zero)
+
+        if ms.allow_tel_back_to_pickup:
+            self.generateArcsBetween(self.placeNodes,self.pickupNodes,distance=Dist.Zero)
+
+
+    def generateArcsBetween(self, nodeLayer1:[Node], nodeLayer2:[Node], distance=Dist.Unit, bidirectional=False):
+        for i1,n1 in enumerate(nodeLayer1):
+            for (i2,n2) in enumerate(nodeLayer2):
+                if distance.value == Dist.Euclidian.value:
+                    d = self.getEuclidianDistance(i1,i2)
+                else: d = distance.value
+                self.arcs.append(Arc(n1,n2,d))
+                if bidirectional: self.arcs.append(Arc(n2,n1,d))
+
+    def getEuclidianDistance(self,y1,y2) ->int:
+        x = np.divide(ms.delivery_distance,(ms.intermidiate_layers+1))
+        y = np.abs(y1-y2)*ms.node_spacing_y
+        return int(round(np.hypot(x,y),0))
 
     @classmethod
     def main(cls):
