@@ -13,7 +13,7 @@ class Arc:
         return str(self.start) +' ' +str(self.end) +' ' +str(self.dist)
 
 class Node:
-    counter = 1
+    counter = 0
     def __init__(self):
         self.number = int(Node.counter)
         Node.counter += 1
@@ -39,30 +39,33 @@ class AmplDataWriter:
         self.use_modelspec = use_modelspec
         AmplDataWriter.path = path
 
-        self.numberOfIntermidiate = ms.place_stations if ms.pickup_stations > ms.place_stations else ms.pickup_stations
-        self.numberNodes = ms.pickup_stations + ms.place_stations + self.numberOfIntermidiate
+        self.numberOfIntermediate = ms.place_stations if ms.pickup_stations > ms.place_stations else ms.pickup_stations
+        self.numberNodes = ms.pickup_stations + ms.place_stations + self.numberOfIntermediate
 
         self.arcs = []
         self.generateLayout()
 
     def generateLayout(self):
-        self.masterSourceNode = Node().number = 0
+        self.masterSourceNode = Node()
         self.pickupNodes = [Node() for i in range(ms.pickup_stations)]
-        self.interNodes = [Node() for i in range(self.numberOfIntermidiate)]
+        self.interNodes = [Node() for i in range(self.numberOfIntermediate)]
         self.placeNodes = [Node() for i in range(ms.place_stations)]
-        self.masterSinkNode = Node().number = self.numberNodes
+        self.masterSinkNode = Node()
         self.generateAllArcs()
 
     def writeDatFile(self,filename):
-        config = ''.join([str(a) + '\n' for a in self.arcs])
+        setup = "param startNode = " + str(self.masterSourceNode) + ";\n"
+        setup += "param endNode = " + str(self.masterSinkNode) + ";"
+        arcs = 'param: ARCS: TAU :=' + '\n'.join([str(a) for a in self.arcs]) +';\n'
+        config = setup + '\n' +arcs
         self.print_to_file(filename,config)
 
     def generateAllArcs(self):
-        self.generateArcsBetween(self.masterSourceNode,self.pickupNodes,distance=0)
+        self.generateArcsBetween([self.masterSourceNode],self.pickupNodes,distance=0)
         self.generateArcsBetween(self.pickupNodes,self.interNodes)
         self.generateArcsBetween(self.interNodes,self.placeNodes)
         self.generateArcsBetween(self.placeNodes,self.pickupNodes,distance=0)
-        self.generateArcsBetween(self.placeNodes,self.masterSinkNode,distance=0)
+        self.generateArcsBetween(self.placeNodes,[self.masterSinkNode],distance=0)
 
     def generateArcsBetween(self,nodeLayer1:[Node],nodeLayer2:[Node],distance=1,bidirectional=False):
         for n1 in nodeLayer1:
