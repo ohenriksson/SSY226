@@ -1,7 +1,22 @@
 from PointPlotter import PointPlotter
 from TaskReader import TaskReader
 import numpy as np
-from modelspec import *
+import modelspec as ms
+
+class Arc:
+    def __init__(self,startNode,endNode,length=1):
+        self.start = startNode
+        self.end = endNode
+        self.dist = length
+
+class Node:
+    counter = 1
+    def __init__(self):
+        self.number = self.counter
+        self.counter += 1
+
+    def __str__(self):
+        return str(self.number)
 
 
 class AmplDataWriter:
@@ -20,9 +35,32 @@ class AmplDataWriter:
     def __init__(self,use_modelspec:bool, path=""):
         self.use_modelspec = use_modelspec
         self.__class__.path = path
+        self.generateLayout()
+
+    def generateLayout(self):
+        smallest = ms.place_stations if ms.pickup_stations > ms.place_stations else ms.pickup_stations
+        self.pickupNodes = [Node() for i in range(ms.pickup_stations)]
+        self.interNodes = [Node() for i in range(smallest)]
+        self.placeNodes = [Node() for i in range(ms.place_stations)]
+        self.generateAllArcs()
 
     def writeDatFile(self,filename):
-        self.print_to_file(filename,"teststring")
+        config = ""
+        self.print_to_file(filename,config)
+
+    def generateAllArcs(self):
+        self.arcs = []
+        self.generateArcsBetween(self.pickupNodes,self.interNodes)
+        self.generateArcsBetween(self.interNodes,self.placeNodes)
+        self.generateArcsBetween(self.placeNodes,self.pickupNodes,distance=0)
+
+    def generateArcsBetween(self,nodeLayer1:[Node],nodeLayer2:[Node],distance=1,bidirectional=False):
+        for n1 in nodeLayer1:
+            for n2 in nodeLayer2:
+                self.arcs.append(Arc(n1,n2))
+                if bidirectional: self.arcs.append(Arc(n1,n2))
+
+
 
     @classmethod
     def main(cls):
