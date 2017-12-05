@@ -1,6 +1,7 @@
 from PointPlotter import PointPlotter
 from TaskReader import TaskReader
 import numpy as np
+from modelspec import *
 
 
 class AmplDataWriter:
@@ -11,9 +12,17 @@ class AmplDataWriter:
     tasks_complete = ""
     allowed_tasks_complete = ""
 
-    input_tasks = "/home/oskar/Desktop/tasks.txt"
-    input_layout = "/home/oskar/Desktop/layout.txt"
-    output_ampl = "/home/oskar/Desktop/test_data.dat"
+    path = ""
+    input_tasks = "tasks.txt"
+    input_layout = "layout.txt"
+    output_ampl = "test_data.dat"
+
+    def __init__(self,use_modelspec:bool, path=""):
+        self.use_modelspec = use_modelspec
+        self.__class__.path = path
+
+    def writeDatFile(self,filename):
+        self.print_to_file(filename,"teststring")
 
     @classmethod
     def main(cls):
@@ -47,18 +56,16 @@ class AmplDataWriter:
         tasks = ''.join([str(i) + cls.separator for i,j in tr.tasks])
         cls.tasks_complete = header + '\n' + tasks
 
-    @classmethod
-    def allowed_tasks_list(cls,tr)
-        node_header = ''.join([str(i) + cls.separator for i in range(tr.tasks.__len__()])
-        tasks = [range()]
-        cls.tasks_complete = node_header + '\n' + tasks
+    #
+    # @classmethod
+    # def allowed_tasks_list(cls,tr):
+    #     node_header = ''.join([str(i) + cls.separator for i in range(tr.tasks.__len__()])
+    #     tasks = [range()]
+    #     cls.tasks_complete = node_header + '\n' + tasks
 
     @classmethod
-    def print_to_file(cls,string):
-        f = open(cls.output_ampl,'w')
-        f.write(string)
+    def print_to_file(cls,output_string,content_string):
+        f = open(output_string,'w')
+        f.write(content_string)
         f.close()
         return
-
-
-AmplDataWriter.main()
