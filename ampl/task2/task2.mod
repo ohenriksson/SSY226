@@ -8,6 +8,8 @@ param edgeCap; # Limitation of AGVs running beside each other.
 param startNode; # Where the AGVs inital starts.
 param endNode;   # opposite to above
 param travelTask; # Task ID for travelling purpose between nodes.
+param taskLowerBound = 1;
+
 
 set NODES = {0..endNode};
 
@@ -77,4 +79,4 @@ sum {k in TIME, t in TASKLIST, (startNode,j) in ARCS} X[startNode,j,t,k] = 0;
 
 
 # Restrict how many times a task is allowed to be done
-restrictTask {t in TASKLIST}: 0 <= sum {k in TIME} (Y[snk_tasks[t],t,k]) <= 1;
+restrictTask {t in TASKLIST}: taskLowerBound <= sum {k in TIME} (Y[snk_tasks[t],t,k])
