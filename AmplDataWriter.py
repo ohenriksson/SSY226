@@ -87,15 +87,17 @@ class AmplDataWriter:
         setup += self.setParameter('nTasks',str(ms.unique_tasks))
         setup += self.setParameter('travelTask',str(0))
         setup += self.setParameter('edgeCap',str(ms.edge_capacity))
-        arcs = self.setParameter('ARCS: TAU :','\n'.join([str(a) for a in self.arcs]))
-        task_src = self.setParameter('task_src :', '\n'.join(t.printStart() for t in self.taskList) )
-        task_snk = self.setParameter('task_snk :', '\n'.join(t.printEnd() for t in self.taskList) )
+        arcs = self.setParameter(': ARCS :TAU :', '\n'.join([str(a) for a in self.arcs]),True)
+        task_src = self.setParameter(':src_tasks :','\n'.join(t.printStart() for t in self.taskList),True)
+        task_snk = self.setParameter(':snk_tasks :', '\n'.join(t.printEnd() for t in self.taskList),True)
         config = '\n'.join([setup,arcs,task_src,task_snk])
         self.print_to_file(filename,config)
 
     @staticmethod
-    def setParameter(parameter,value):
-        return 'param ' +parameter +' = ' +value +';\n'
+    def setParameter(parameter,value,newLine=False,):
+        sign = ' = '
+        if newLine: sign = '=\n';
+        return 'param ' +parameter +sign +value +';\n'
 
     def generateAllArcs(self):
         self.generateArcsBetween([self.masterSourceNode],self.pickupNodes,distance=Dist.Zero)

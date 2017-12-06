@@ -11,9 +11,9 @@
 #   o                               [ ]
 #   o
 
-pickup_stations = 4
-place_stations =  5
-delivery_distance = 4  #[m] distance in x direction (euclidian distances will be computed)
+pickup_stations = 2
+place_stations =  2
+delivery_distance = 2  #[m] distance in x direction (euclidian distances will be computed)
 
 
 

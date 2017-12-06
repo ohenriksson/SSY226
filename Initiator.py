@@ -1,4 +1,4 @@
-from AmplOutputReader import AmplOutputReader
+#from AmplOutputReader import AmplOutputReader
 from AmplDataWriter import AmplDataWriter
 
 # read the config file and write to ampl model
