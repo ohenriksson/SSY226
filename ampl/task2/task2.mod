@@ -14,6 +14,7 @@ set NODES = {0..endNode};
 set ARCS within {NODES,NODES}; # Pair of connecting nodes.
 set INTER = NODES diff {startNode,endNode}; # Set of intermediate nodes (in- and out-flow).
 param TAU {ARCS}; # Time cost for each arc.
+param epsilon = 1;
 
 #---TASK PROPERTIES
 param nTasks; # Number of tasks.
@@ -61,8 +62,14 @@ restrictAGVs: sum {k in TIME, (startNode,j) in ARCS, t in TASK} X[startNode,j,t,
 
 
 #--arctravel num of AGVs travelling on an arc.
-# travel {k in TIME, (i,j) in ARCS}:
-# sum {k_win in k..k+TAU[i,j]-1, t in TASK: k_win <= T} (X[i,j,t,k_win]) <= edgeCap;
+#travel {k in TIME, (i,j) in ARCS}:
+#sum {k_win in k..k+TAU[i,j]-1, t in TASK: k_win <= T} (X[i,j,t,k_win]) <= edgeCap;
+
+travel {k in TIME, (i,j) in ARCS}:
+sum {k_win in k..k+epsilon-1, t in TASK: k_win <= T} (X[i,j,t,k_win]) <= edgeCap;
+
+
+
 
 restrictStartNodeTask: # (always use task 0 since it is not in tasklist)
 sum {k in TIME, t in TASKLIST, (startNode,j) in ARCS} X[startNode,j,t,k] = 0;

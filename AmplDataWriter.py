@@ -1,5 +1,3 @@
-from PointPlotter import PointPlotter
-from TaskReader import TaskReader
 import numpy as np
 import modelspec as ms
 from enum import Enum
@@ -46,13 +44,6 @@ class Task:
 
 
 class AmplDataWriter:
-    bigNumber = 1000000
-    separator = " "
-
-    tau_complete = ""
-    tasks_complete = ""
-    allowed_tasks_complete = ""
-
     path = ""
     input_tasks = "tasks.txt"
     input_layout = "layout.txt"
@@ -65,11 +56,11 @@ class AmplDataWriter:
 
         self.arcs = []
         self.taskList = []
+        self.interLayers = []
         self.generateLayout()
         self.createAllTasks()
 
     def generateLayout(self):
-        self.interLayers = []
         self.masterSourceNode = Node()
         self.pickupNodes = [Node() for i in range(ms.pickup_stations)]
         for layers in range(ms.intermidiate_layers):
@@ -78,6 +69,7 @@ class AmplDataWriter:
         self.placeNodes = [Node() for i in range(ms.place_stations)]
         self.masterSinkNode = Node()
         self.generateAllArcs()
+
 
     def writeDatFile(self,filename):
         setup = self.setParameter('startNode',str(self.masterSourceNode))
@@ -101,13 +93,12 @@ class AmplDataWriter:
 
     def generateAllArcs(self):
         self.generateArcsBetween([self.masterSourceNode],self.pickupNodes,distance=Dist.Zero)
-
         for (index,layer) in enumerate(self.interLayers):
             if index == 0:
                 self.generateArcsBetween(self.pickupNodes,layer,distance=Dist.Euclidian)
-            elif index == self.interLayers.__len__() -1:
-                self.generateArcsBetween(self.interNodes,self.placeNodes,distance=Dist.Euclidian)
-            else:
+            if index == self.interLayers.__len__()-1:
+                self.generateArcsBetween(layer,self.placeNodes,distance=Dist.Euclidian)
+            elif index < self.interLayers.__len__():
                 self.generateArcsBetween(self.interLayers[index-1],layer)
 
         self.generateArcsBetween(self.placeNodes,[self.masterSinkNode],distance=Dist.Zero)
@@ -142,47 +133,9 @@ class AmplDataWriter:
         return Task(start,stop)
 
     @classmethod
-    def main(cls):
-        pp = PointPlotter(cls.input_layout)
-        tr = TaskReader(cls.input_tasks)
-
-        cls.aggregate_nodes(pp)
-        cls.aggregate_tasks(tr)
-        cls.alowed_tasks_list(tr)
-        cls.print_to_file(cls.tau_complete + cls.tasks_complete + cls.allowed_tasks_complete)
-
-    @classmethod
-    def aggregate_nodes(cls, pp):
-        nNodes = len(pp.points_id)
-        header = ''.join([str(i) + cls.separator for i in range(nNodes)])
-
-        TAU = np.ones([nNodes,nNodes])*cls.bigNumber
-
-        for l,(i,j) in enumerate(pp.segment_ids):
-            i1 = pp.points_id.index(str(i))
-            i2 = pp.points_id.index(str(j))
-            TAU[i1,i2] = pp.segment_distance[l]
-
-        cls.tau_complete = header + "\n" + ''.join(
-            [str(l) + cls.separator + ''.join([str(int(cell)) + cls.separator for cell in i])
-             + '\n' for l, i in enumerate(TAU)])
-
-    @classmethod
-    def aggregate_tasks(cls, tr):
-        header = ''.join([str(i) + cls.separator for i in range(tr.tasks.__len__())])
-        tasks = ''.join([str(i) + cls.separator for i,j in tr.tasks])
-        cls.tasks_complete = header + '\n' + tasks
-
-    #
-    # @classmethod
-    # def allowed_tasks_list(cls,tr):
-    #     node_header = ''.join([str(i) + cls.separator for i in range(tr.tasks.__len__()])
-    #     tasks = [range()]
-    #     cls.tasks_complete = node_header + '\n' + tasks
-
-    @classmethod
     def print_to_file(cls,output_string,content_string):
         f = open(output_string,'w')
         f.write(content_string)
         f.close()
         return
+
