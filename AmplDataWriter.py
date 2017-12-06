@@ -23,10 +23,10 @@ class Arc:
     def __init__(self,startNode:int,endNode:int,length:int):
         self.start = startNode
         self.end = endNode
-        self.dist = length
+        self.dist = np.divide(length,ms.agv_velocity)
 
     def __str__(self):
-        return str(self.start) +' ' +str(self.end) +' ' +str(int(np.divide(self.dist,ms.agv_velocity)))
+        return str(self.start) +' ' +str(self.end) +' ' +str(int(self.dist))
 
 class Task:
     counter = 1
@@ -59,6 +59,7 @@ class AmplDataWriter:
         self.interLayers = []
         self.generateLayout()
         self.createAllTasks()
+        self.timeFrame = self.calculateTimeframe()
 
     def generateLayout(self):
         self.masterSourceNode = Node()
@@ -74,16 +75,23 @@ class AmplDataWriter:
     def writeDatFile(self,filename):
         setup = self.setParameter('startNode',str(self.masterSourceNode))
         setup += self.setParameter('endNode',str(self.masterSinkNode))
-        setup += self.setParameter('T',str(ms.timeframe))
+        setup += self.setParameter('T',str(self.timeFrame))
         setup += self.setParameter('nrAGVs',str(ms.n_agvs))
         setup += self.setParameter('nTasks',str(ms.unique_tasks))
         setup += self.setParameter('travelTask',str(0))
         setup += self.setParameter('edgeCap',str(ms.edge_capacity))
+        setup += self.setParameter('epsilon', str(ms.epsilon))
         arcs = self.setParameter(': ARCS :TAU :', '\n'.join([str(a) for a in self.arcs]),True)
         task_src = self.setParameter(':src_tasks :','\n'.join(t.printStart() for t in self.taskList),True)
         task_snk = self.setParameter(':snk_tasks :', '\n'.join(t.printEnd() for t in self.taskList),True)
         config = '\n'.join([setup,arcs,task_src,task_snk])
         self.print_to_file(filename,config)
+
+    def calculateTimeframe(self):
+        longestRoute = 0
+        for arc in self.arcs:
+            if longestRoute < arc.dist: longestRoute = arc.dist
+        return 4*longestRoute
 
     @staticmethod
     def setParameter(parameter,value,newLine=False,):
@@ -92,14 +100,16 @@ class AmplDataWriter:
         return 'param ' +parameter +sign +value +';\n'
 
     def generateAllArcs(self):
+        bdPaths = not ms.allow_tel_back_to_pickup
+
         self.generateArcsBetween([self.masterSourceNode],self.pickupNodes,distance=Dist.Zero)
         for (index,layer) in enumerate(self.interLayers):
             if index == 0:
-                self.generateArcsBetween(self.pickupNodes,layer,distance=Dist.Euclidian)
+                self.generateArcsBetween(self.pickupNodes,layer,distance=Dist.Euclidian,bidirectional=bdPaths)
             if index == self.interLayers.__len__()-1:
-                self.generateArcsBetween(layer,self.placeNodes,distance=Dist.Euclidian)
+                self.generateArcsBetween(layer,self.placeNodes,distance=Dist.Euclidian,bidirectional=bdPaths)
             elif index < self.interLayers.__len__():
-                self.generateArcsBetween(self.interLayers[index-1],layer)
+                self.generateArcsBetween(self.interLayers[index-1],layer,distance=Dist.Euclidian,bidirectional=bdPaths)
 
         self.generateArcsBetween(self.placeNodes,[self.masterSinkNode],distance=Dist.Zero)
 
@@ -125,11 +135,10 @@ class AmplDataWriter:
          for t in range(ms.unique_tasks):
              self.taskList.append(self.createATask())
 
-
     def createATask(self)->Task:
         start = rn.randint(1,ms.pickup_stations)
         stop = rn.randint(0,ms.place_stations)
-        stop += self.placeNodes.__len__()
+        stop += self.numberNodes - ms.place_stations
         return Task(start,stop)
 
     @classmethod
@@ -138,4 +147,3 @@ class AmplDataWriter:
         f.write(content_string)
         f.close()
         return
-
