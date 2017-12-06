@@ -8,7 +8,7 @@ param edgeCap; # Limitation of AGVs running beside each other.
 param startNode; # Where the AGVs inital starts.
 param endNode;   # opposite to above
 param travelTask; # Task ID for travelling purpose between nodes.
-param taskLowerBound = 1;
+param taskLowerBound;
 
 
 set NODES = {0..endNode};

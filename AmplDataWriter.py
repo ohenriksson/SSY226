@@ -81,6 +81,7 @@ class AmplDataWriter:
         setup += self.setParameter('travelTask',str(0))
         setup += self.setParameter('edgeCap',str(ms.edge_capacity))
         setup += self.setParameter('epsilon', str(ms.epsilon))
+        setup += self.setParameter('taskLowerBound',str(ms.all_tasks))
         arcs = self.setParameter(': ARCS :TAU :', '\n'.join([str(a) for a in self.arcs]),True)
         task_src = self.setParameter(':src_tasks :','\n'.join(t.printStart() for t in self.taskList),True)
         task_snk = self.setParameter(':snk_tasks :', '\n'.join(t.printEnd() for t in self.taskList),True)
