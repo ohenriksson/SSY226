@@ -3,10 +3,12 @@
 /ampl contains optimization models in AMPL format(.dat, .mod and .run)
 
 
-## To start:
-modify the modelspec.py with desired parameters  
-start by running Initatior.py (Python 3.5.x needed)
-load the __.dat to your ampl model.
+## To start optimizing:
+modify the `modelspec.py` with desired parameters  
+create the `testFile.dat`: running `python3 Initatior.py` (Python 3.5.x needed)
+load the `testFile.dat` to `ampl/task2` model using:
+`ampl: include task2.run;`
+
   
 ##
 AmplDataWriter reads layout data files and prints into a AMPL friendly format. 
