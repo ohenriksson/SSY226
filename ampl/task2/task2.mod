@@ -9,7 +9,7 @@ param startNode; # Where the AGVs inital starts.
 param endNode;   # opposite to above
 param travelTask; # Task ID for travelling purpose between nodes.
 param taskLowerBound;
-
+param nodeCap = 1;
 
 set NODES = {0..endNode};
 
@@ -28,7 +28,7 @@ param snk_tasks {TASKLIST}; #sink for each task
 
 #---VARIABLES
 var X {NODES,NODES,TASK,TIME} integer >= 0, <= edgeCap; # Indicator for sending an AGV on an arc.
-var Y {NODES,TASK,TIME} integer >= 0; # Indicator for an AGV arriving at a node
+var Y {NODES,TASK,TIME} integer >= 0, <=nodeCap; # Indicator for an AGV arriving at a node
 
 
 #---OBJ FUNCTION
@@ -79,4 +79,6 @@ sum {k in TIME, t in TASKLIST, (startNode,j) in ARCS} X[startNode,j,t,k] = 0;
 
 
 # Restrict how many times a task is allowed to be done
-restrictTask {t in TASKLIST}: taskLowerBound <= sum {k in TIME} (Y[snk_tasks[t],t,k])
+restrictTask {t in TASKLIST}: taskLowerBound <= sum {k in TIME} (Y[snk_tasks[t],t,k]);
+
+nodeCapacity {k in TIME, n in INTER}: sum{t in TASK} Y[n,t,k] <= nodeCap;
