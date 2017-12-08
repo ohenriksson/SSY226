@@ -73,7 +73,8 @@ class AmplDataWriter:
 
 
     def writeDatFile(self,filename):
-        setup = self.setParameter('startNode',str(self.masterSourceNode))
+        setup = ''.join(["#pickupNodes:", str(ms.pickup_stations) , " interNodes:", str(ms.intermidiate_nodes), " placeNodes:", str(ms.place_stations), '\n'])
+        setup += self.setParameter('startNode',str(self.masterSourceNode))
         setup += self.setParameter('endNode',str(self.masterSinkNode))
         setup += self.setParameter('T',str(self.timeFrame))
         setup += self.setParameter('nrAGVs',str(ms.n_agvs))
