@@ -1,7 +1,7 @@
 reset;
 option solver cplex;
 model task2.mod;
-data testFile2.dat;
+data testFile3.dat;
 solve;
 option display_1col 0;
 #option display_round 0;
