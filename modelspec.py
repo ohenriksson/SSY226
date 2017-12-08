@@ -11,7 +11,7 @@
 #   o                               [ ]
 #   o
 
-pickup_stations = 10
+pickup_stations = 6
 place_stations =  10
 delivery_distance = 4#[m] distance in x direction (euclidian distances will be computed)
 
