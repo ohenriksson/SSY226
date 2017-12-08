@@ -2,6 +2,7 @@ import numpy as np
 import modelspec as ms
 from enum import Enum
 import random as rn
+from GridLayout import GridLayout
 
 class Dist(Enum):
     Euclidian = 'eucl',
@@ -20,7 +21,7 @@ class Node:
 
 
 class Arc:
-    def __init__(self,startNode:int,endNode:int,length:int):
+    def __init__(self,startNode:int, endNode:int,length:int):
         self.start = startNode
         self.end = endNode
         self.dist = np.divide(length,ms.agv_velocity)
@@ -30,7 +31,7 @@ class Arc:
 
 class Task:
     counter = 1
-    def __init__(self,startNode:Node,endNode:Node):
+    def __init__(self,startNode:Node, endNode:Node):
         self.sNode = startNode
         self.eNode = endNode
         self.index = Task.counter
@@ -57,11 +58,12 @@ class AmplDataWriter:
         self.arcs = []
         self.taskList = []
         self.interLayers = []
-        self.generateLayout()
+        self.generateNodes()
+        self.generateArcs()
         self.createAllTasks()
         self.timeFrame = self.calculateTimeframe()
 
-    def generateLayout(self):
+    def generateNodes(self):
         self.masterSourceNode = Node()
         self.pickupNodes = [Node() for i in range(ms.pickup_stations)]
         for layers in range(ms.intermidiate_layers):
@@ -69,7 +71,6 @@ class AmplDataWriter:
             self.interLayers.append(interNodes)
         self.placeNodes = [Node() for i in range(ms.place_stations)]
         self.masterSinkNode = Node()
-        self.generateAllArcs()
 
 
     def writeDatFile(self,filename):
@@ -101,10 +102,23 @@ class AmplDataWriter:
         if newLine: sign = '=\n';
         return 'param ' +parameter +sign +value +';\n'
 
-    def generateAllArcs(self):
-        bdPaths = not ms.allow_tel_back_to_pickup
+    def generateGridArcs(self,bdPaths):
 
+
+    def generateArcs(self):
+        bdPaths = not ms.allow_tel_back_to_pickup
         self.generateArcsBetween([self.masterSourceNode],self.pickupNodes,distance=Dist.Zero)
+
+        if ms.grid_layout: self.generateGridArcs(bdPaths)
+        else:   self.generateAllArcs(bdPaths)
+
+        self.generateArcsBetween(self.placeNodes,[self.masterSinkNode],distance=Dist.Zero)
+
+        if ms.allow_tel_back_to_pickup:
+            self.generateArcsBetween(self.placeNodes,self.pickupNodes,distance=Dist.Zero)
+
+
+    def generateAllArcs(self,bdPaths):
         for (index,layer) in enumerate(self.interLayers):
             if index == 0:
                 self.generateArcsBetween(self.pickupNodes,layer,distance=Dist.Euclidian,bidirectional=bdPaths)
@@ -112,12 +126,6 @@ class AmplDataWriter:
                 self.generateArcsBetween(layer,self.placeNodes,distance=Dist.Euclidian,bidirectional=bdPaths)
             elif index < self.interLayers.__len__():
                 self.generateArcsBetween(self.interLayers[index-1],layer,distance=Dist.Euclidian,bidirectional=bdPaths)
-
-        self.generateArcsBetween(self.placeNodes,[self.masterSinkNode],distance=Dist.Zero)
-
-        if ms.allow_tel_back_to_pickup:
-            self.generateArcsBetween(self.placeNodes,self.pickupNodes,distance=Dist.Zero)
-
 
     def generateArcsBetween(self, nodeLayer1:[Node], nodeLayer2:[Node], distance=Dist.Unit, bidirectional=False):
         for i1,n1 in enumerate(nodeLayer1):
