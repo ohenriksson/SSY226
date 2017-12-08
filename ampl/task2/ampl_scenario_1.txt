@@ -1,7 +1,16 @@
 #--This is just a data file to keep track of results
+#(nAGVs_interStart: sum{t in TASK, i in INTER} Y[i,t,0] = 0; not used)
+
 
 param T = 144:
-Objective : 0.1944444444
+CPLEX 12.7.1.0: optimal integer solution; objective 0.1944444444
+0 MIP simplex iterations
+0 branch-and-bound nodes
+
+param T = 80;
+CPLEX 12.7.1.0: optimal integer solution; objective 0.1875
+150197 MIP simplex iterations
+0 branch-and-bound nodes
 
 param T=72:
 Objective: 0.180555556
@@ -9,8 +18,22 @@ Objective: 0.180555556
 0 branch-and-bound nodes
 absmipgap = 2.77556e-17, relmipgap = 1.53723e-16
 
+param T= 70;
+CPLEX 12.7.1.0: optimal integer solution; objective 0.1857142857
+105132 MIP simplex iterations
+0 branch-and-bound nodes
+absmipgap = 2.77556e-17, relmipgap = 1.49453e-16
+
+param T = 60;
+CPLEX 12.7.1.0: optimal integer solution; objective 0.1833333333
+84064 MIP simplex iterations
+
+param T = 50;
+CPLEX 12.7.1.0: integer infeasible.
+56826 MIP simplex iterations
 
 param T = 36:
+27999 MIP simplex iteration
 Not feasible (task lower bound violated)
 
 
