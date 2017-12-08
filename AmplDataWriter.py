@@ -1,47 +1,9 @@
+from GridLayout import GridLayout
+from LayoutTypes import *
+
 import numpy as np
 import modelspec as ms
-from enum import Enum
 import random as rn
-from GridLayout import GridLayout
-
-class Dist(Enum):
-    Euclidian = 'eucl',
-    Zero = 0,
-    Unit = 1,
-
-
-class Node:
-    counter = 0
-    def __init__(self):
-        self.number = int(Node.counter)
-        Node.counter += 1
-
-    def __str__(self):
-        return str(self.number)
-
-
-class Arc:
-    def __init__(self,startNode:int, endNode:int,length:int):
-        self.start = startNode
-        self.end = endNode
-        self.dist = np.divide(length,ms.agv_velocity)
-
-    def __str__(self):
-        return str(self.start) +' ' +str(self.end) +' ' +str(int(self.dist))
-
-class Task:
-    counter = 1
-    def __init__(self,startNode:Node, endNode:Node):
-        self.sNode = startNode
-        self.eNode = endNode
-        self.index = Task.counter
-        Task.counter+= 1
-
-    def printStart(self) -> str:
-        return str(self.index) +' ' +str(self.sNode)
-
-    def printEnd(self) -> str:
-        return str(self.index) +' ' +str(self.eNode)
 
 
 class AmplDataWriter:
@@ -97,13 +59,10 @@ class AmplDataWriter:
         return 4*longestRoute
 
     @staticmethod
-    def setParameter(parameter,value,newLine=False,):
+    def setParameter(parameter, value, newLine=False,):
         sign = ' = '
         if newLine: sign = '=\n';
         return 'param ' +parameter +sign +value +';\n'
-
-    def generateGridArcs(self,bdPaths):
-
 
     def generateArcs(self):
         bdPaths = not ms.allow_tel_back_to_pickup
@@ -117,6 +76,12 @@ class AmplDataWriter:
         if ms.allow_tel_back_to_pickup:
             self.generateArcsBetween(self.placeNodes,self.pickupNodes,distance=Dist.Zero)
 
+    def generateGridArcs(self,bdPaths):
+        for (index,layer) in enumerate(self.interLayers):
+            self.arcs += GridLayout.generateArcsInLayer(layer)
+            if index < self.interLayers.__len__()-1:
+                self.arcs += GridLayout.arcsBetweenLayers(layer,self.interLayers[index+1])
+        return
 
     def generateAllArcs(self,bdPaths):
         for (index,layer) in enumerate(self.interLayers):
