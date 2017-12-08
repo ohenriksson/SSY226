@@ -11,15 +11,15 @@
 #   o                               [ ]
 #   o
 
-pickup_stations = 10
-place_stations =  10
-delivery_distance = 4#[m] distance in x direction (euclidian distances will be computed)
-
-
+pickup_stations = 3 
+place_stations = 4
+delivery_distance = 4 #[m] distance in x direction (euclidian distances will be computed)
+grid_layout = False #arcs are only connected to neighbouring nodes
 
 # --- Optimization Specifications
 n_agvs = 2
 agv_velocity = 1 #[m/s]
+
 
 # --- DANGER ZONE
 allow_tel_back_to_pickup = True#should AGVs teleport back when a task is completed or
