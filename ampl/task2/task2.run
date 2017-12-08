@@ -1,4 +1,4 @@
-reset;
+#reset;
 option solver cplex;
 model task2.mod;
 data testFile.dat;

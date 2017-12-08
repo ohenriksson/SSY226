@@ -1,24 +1,6 @@
-#--This is just a data file to keep track of results
-
-param T = 144:
-Objective : 0.1944444444
-
-param T=72:
-Objective: 0.180555556
-113253 MIP simplex iterations
-0 branch-and-bound nodes
-absmipgap = 2.77556e-17, relmipgap = 1.53723e-16
-
-
-param T = 36:
-Not feasible (task lower bound violated)
-
-
-
-
-#--parameters unchanged:
 param startNode = 0;
 param endNode = 31;
+param T = 144;
 param nrAGVs = 2;
 param nTasks = 10;
 param travelTask = 0;
