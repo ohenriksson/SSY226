@@ -1,12 +1,14 @@
 # Data
-param T = 10;
+param T = 50;
 
 param nTasks = 3;
 param nrAGVs = 2;
-param travelTask = 0;
 param startNode = 0;
 param endNode = 8;
+param travelTask = 0;
 param edgeCap = 1;
+param epsilon = 1;
+param taskLowerBound = 1;
 
 #[start,dest,traveltime]
 param: ARCS: TAU :=

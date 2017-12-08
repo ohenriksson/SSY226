@@ -31,8 +31,11 @@ var X {NODES,NODES,TASK,TIME} integer >= 0, <= edgeCap; # Indicator for sending 
 var Y {NODES,TASK,TIME} integer >= 0, <=nodeCap; # Indicator for an AGV arriving at a node
 
 
+
 #---OBJ FUNCTION
-maximize obj: sum{k in TIME, tsk in TASKLIST} Y[snk_tasks[tsk], tsk ,k];
+maximize obj_fun: sum{k in TIME, tsk in TASKLIST} Y[snk_tasks[tsk], tsk ,k] / T;
+
+
 
 #---CONSTRAINTS
 s.t.
@@ -62,7 +65,6 @@ sum {(n,j) in ARCS, t2 in TASKLIST: n != src_tasks[t2]} X[n,j,t2,k] = 0;
 # nAGVs_interStart: sum{t in TASK, i in INTER} Y[i,t,0] = 0;
 restrictAGVs: sum {k in TIME, (startNode,j) in ARCS, t in TASK} X[startNode,j,t,k] <= nrAGVs;
 
-
 #--arctravel num of AGVs travelling on an arc.
 #travel {k in TIME, (i,j) in ARCS}:
 #sum {k_win in k..k+TAU[i,j]-1, t in TASK: k_win <= T} (X[i,j,t,k_win]) <= edgeCap;
@@ -70,8 +72,6 @@ restrictAGVs: sum {k in TIME, (startNode,j) in ARCS, t in TASK} X[startNode,j,t,
 #travel constraint using epsilon
 travel {k in TIME, (i,j) in ARCS}:
 sum {k_win in k..k+epsilon-1, t in TASK: k_win <= T} (X[i,j,t,k_win]) <= edgeCap;
-
-
 
 
 restrictStartNodeTask: # (always use task 0 since it is not in tasklist)
@@ -82,3 +82,5 @@ sum {k in TIME, t in TASKLIST, (startNode,j) in ARCS} X[startNode,j,t,k] = 0;
 restrictTask {t in TASKLIST}: taskLowerBound <= sum {k in TIME} (Y[snk_tasks[t],t,k]);
 
 nodeCapacity {k in TIME, n in INTER}: sum{t in TASK} Y[n,t,k] <= nodeCap;
+
+
