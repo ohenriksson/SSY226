@@ -1,7 +1,15 @@
+
+
+
+param T = 72.0;
+CPLEX 12.7.1.0: optimal integer solution; objective 0.1944444444
+92311 MIP simplex iterations
+0 branch-and-bound nodes
+
+
 # 6 pickup, 10 place, xdistance = 2
 param startNode = 0;
 param endNode = 27;
-param T = 72.0;
 param nrAGVs = 2;
 param nTasks = 10;
 param travelTask = 0;
