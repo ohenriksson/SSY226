@@ -1,6 +1,8 @@
 
 param T = 100;
-
+CPLEX 12.7.1.0: optimal integer solution; objective 0.21
+182877 MIP simplex iterations
+0 branch-and-bound nodes
 
 param T = 72.0;
 CPLEX 12.7.1.0: optimal integer solution; objective 0.1944444444
