@@ -1,5 +1,6 @@
 from GridLayout import GridLayout
 from LayoutTypes import *
+from typing import List
 
 import numpy as np
 import modelspec as ms
@@ -65,25 +66,19 @@ class AmplDataWriter:
         return 'param ' +parameter +sign +value +';\n'
 
     def generateArcs(self):
-        bdPaths = not ms.allow_tel_back_to_pickup
         self.generateArcsBetween([self.masterSourceNode],self.pickupNodes,distance=Dist.Zero)
 
-        if ms.grid_layout: self.generateGridArcs(bdPaths)
-        else:   self.generateAllArcs(bdPaths)
+        if ms.grid_layout: self.arcs += GridLayout.generateGridArcs([self.pickupNodes] + self.interLayers + [self.placeNodes])
+        else: self.generateAllArcs()
 
         self.generateArcsBetween(self.placeNodes,[self.masterSinkNode],distance=Dist.Zero)
 
         if ms.allow_tel_back_to_pickup:
             self.generateArcsBetween(self.placeNodes,self.pickupNodes,distance=Dist.Zero)
 
-    def generateGridArcs(self,bdPaths):
-        for (index,layer) in enumerate(self.interLayers):
-            self.arcs += GridLayout.generateArcsInLayer(layer)
-            if index < self.interLayers.__len__()-1:
-                self.arcs += GridLayout.arcsBetweenLayers(layer,self.interLayers[index+1])
-        return
 
-    def generateAllArcs(self,bdPaths):
+    def generateAllArcs(self):
+        bdPaths = not ms.allow_tel_back_to_pickup
         for (index,layer) in enumerate(self.interLayers):
             if index == 0:
                 self.generateArcsBetween(self.pickupNodes,layer,distance=Dist.Euclidian,bidirectional=bdPaths)

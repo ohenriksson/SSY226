@@ -8,6 +8,7 @@ class Dist(Enum):
     Unit = 1,
 
 
+
 class Node:
     counter = 0
     def __init__(self):

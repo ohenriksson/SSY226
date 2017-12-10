@@ -14,7 +14,7 @@
 pickup_stations = 3 
 place_stations = 4
 delivery_distance = 4 #[m] distance in x direction (euclidian distances will be computed)
-grid_layout = False #arcs are only connected to neighbouring nodes
+grid_layout = True #arcs are only connected to neighbouring nodes
 
 # --- Optimization Specifications
 n_agvs = 2
