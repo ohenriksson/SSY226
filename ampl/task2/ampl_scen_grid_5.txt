@@ -1,5 +1,36 @@
-param nrAGVs = 12;
+param nrAGVs = 15;
 
+param nrAGVs = 14;
+CPLEX 12.7.1.0: optimal integer solution; objective 1.11
+249494 MIP simplex iterations
+67 branch-and-bound nodes
+_solve_elapsed_time = 763.065
+
+_nvars = 1173220
+
+_ncons = 83438
+
+
+param nrAGVs = 13;
+CPLEX 12.7.1.0: optimal integer solution; objective 1.03
+94503 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 606.441
+
+_nvars = 1173220
+
+_ncons = 83438
+
+
+param nrAGVs = 12;
+CPLEX 12.7.1.0: optimal integer solution; objective 0.95
+40790 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 286.115
+
+_nvars = 1173220
+
+_ncons = 83438
 
 
 param nrAGVs = 11;
