@@ -1,0 +1,228 @@
+param T=100:
+CPLEX 12.7.1.0: optimal integer solution; objective 0.23
+29 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 19.9394
+
+_nvars = 1173220
+
+_ncons = 83438
+
+param T=80:
+CPLEX 12.7.1.0: optimal integer solution; objective 0.225
+19 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 15.6767
+
+_nvars = 940896
+
+_ncons = 66918
+
+param T=72:
+CPLEX 12.7.1.0: optimal integer solution; objective 0.2222222222
+22 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 12.3524
+
+_nvars = 847968
+
+_ncons = 60310
+
+
+param T= 70:
+CPLEX 12.7.1.0: optimal integer solution; objective 0.2285714286
+23 MIP simplex iterations
+0 branch-and-bound nodes
+absmipgap = 2.77556e-17, relmipgap = 1.21431e-16
+_solve_elapsed_time = 11.065
+
+_nvars = 824736
+
+_ncons = 58658
+
+
+param T = 60;
+CPLEX 12.7.1.0: optimal integer solution; objective 0.2166666667
+25 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 10.7465
+
+_nvars = 708576
+
+_ncons = 50398
+ 
+ param T = 50.0:
+ CPLEX 12.7.1.0: optimal integer solution; objective 0.22
+21 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 5.24475
+
+_nvars = 592416
+
+_ncons = 42138
+ 
+ 
+ param T = 36.0;
+CPLEX 12.7.1.0: integer infeasible.
+12922 MIP simplex iterations
+0 branch-and-bound nodes
+No basis.
+_solve_elapsed_time = 2.41351
+
+_nvars = 429792
+
+_ncons = 30574
+
+
+
+
+#pickupNodes:10 interNodes:10 placeNodes:10
+param startNode = 0;
+param endNode = 31;
+param nrAGVs = 3;
+param T = 36.0;
+param nTasks = 10;
+param travelTask = 0;
+param edgeCap = 1;
+param epsilon = 1;
+param taskLowerBound = 1;
+
+param : ARCS :TAU :=
+0 1 0
+0 2 0
+0 3 0
+0 4 0
+0 5 0
+0 6 0
+0 7 0
+0 8 0
+0 9 0
+0 10 0
+1 2 2
+2 1 2
+2 3 2
+3 2 2
+3 4 2
+4 3 2
+4 5 2
+5 4 2
+5 6 2
+6 5 2
+6 7 2
+7 6 2
+7 8 2
+8 7 2
+8 9 2
+9 8 2
+9 10 2
+10 9 2
+1 11 2
+11 1 2
+2 12 2
+12 2 2
+3 13 2
+13 3 2
+4 14 2
+14 4 2
+5 15 2
+15 5 2
+6 16 2
+16 6 2
+7 17 2
+17 7 2
+8 18 2
+18 8 2
+9 19 2
+19 9 2
+10 20 2
+20 10 2
+11 12 2
+12 11 2
+12 13 2
+13 12 2
+13 14 2
+14 13 2
+14 15 2
+15 14 2
+15 16 2
+16 15 2
+16 17 2
+17 16 2
+17 18 2
+18 17 2
+18 19 2
+19 18 2
+19 20 2
+20 19 2
+11 21 2
+21 11 2
+12 22 2
+22 12 2
+13 23 2
+23 13 2
+14 24 2
+24 14 2
+15 25 2
+25 15 2
+16 26 2
+26 16 2
+17 27 2
+27 17 2
+18 28 2
+28 18 2
+19 29 2
+29 19 2
+20 30 2
+30 20 2
+21 22 2
+22 21 2
+22 23 2
+23 22 2
+23 24 2
+24 23 2
+24 25 2
+25 24 2
+25 26 2
+26 25 2
+26 27 2
+27 26 2
+27 28 2
+28 27 2
+28 29 2
+29 28 2
+29 30 2
+30 29 2
+21 31 0
+22 31 0
+23 31 0
+24 31 0
+25 31 0
+26 31 0
+27 31 0
+28 31 0
+29 31 0
+30 31 0;
+
+param :src_tasks :=
+1 1
+2 6
+3 3
+4 9
+5 6
+6 5
+7 9
+8 6
+9 4
+10 5;
+
+param :snk_tasks :=
+1 22
+2 28
+3 21
+4 22
+5 29
+6 24
+7 24
+8 30
+9 22
+10 27;

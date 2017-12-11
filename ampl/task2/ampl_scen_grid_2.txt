@@ -11,7 +11,14 @@ _solve_elapsed_time = 170.144
 
 
 param T = 288:
+CPLEX 12.7.1.0: optimal integer solution; objective 0.1597222222
+28 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 140.282
 
+_nvars = 3357020
+
+_ncons = 238726
 
 
 
