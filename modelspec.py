@@ -11,8 +11,8 @@
 #   o                               [ ]
 #   o
 
-pickup_stations = 10 
-place_stations = 10
+pickup_stations = 4 
+place_stations = 4
 delivery_distance = 4 #[m] distance in x direction (euclidian distances will be computed)
 grid_layout = True #arcs are only connected to neighbouring nodes
 

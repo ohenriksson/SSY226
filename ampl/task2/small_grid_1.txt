@@ -1,0 +1,276 @@
+####18
+
+
+
+####17
+CPLEX 12.7.1.0: absmipgap=1e-1
+CPLEX 12.7.1.0: optimal integer solution within mipgap or absmipgap; objective 1.16
+784995 MIP simplex iterations
+1618 branch-and-bound nodes
+absmipgap = 0.0957203, relmipgap = 0.0825175
+_solve_elapsed_time = 201.466
+
+_nvars = 53550
+
+_ncons = 9390
+
+
+####16
+CPLEX 12.7.1.0: absmipgap=1e-1
+CPLEX 12.7.1.0: optimal integer solution within mipgap or absmipgap; objective 1.1
+748918 MIP simplex iterations
+1239 branch-and-bound nodes
+absmipgap = 0.1, relmipgap = 0.0909091
+_solve_elapsed_time = 160.548
+
+_nvars = 53550
+
+_ncons = 9390
+
+####15
+CPLEX 12.7.1.0: absmipgap=1e-1
+CPLEX 12.7.1.0: optimal integer solution within mipgap or absmipgap; objective 1.08
+689306 MIP simplex iterations
+558 branch-and-bound nodes
+absmipgap = 0.0718422, relmipgap = 0.0665206
+_solve_elapsed_time = 124.016
+
+
+
+
+####14
+CPLEX 12.7.1.0: optimal integer solution; objective 1.06
+5176718 MIP simplex iterations
+6794 branch-and-bound nodes
+absmipgap = 4.44089e-16, relmipgap = 4.18952e-16
+_solve_elapsed_time = 826.268
+
+_nvars = 53550
+
+_ncons = 9390
+
+
+####13
+CPLEX 12.7.1.0: optimal integer solution; objective 1.02
+1702288 MIP simplex iterations
+2488 branch-and-bound nodes
+_solve_elapsed_time = 247.615
+
+_nvars = 53550
+
+_ncons = 9390
+
+
+####12
+CPLEX 12.7.1.0: optimal integer solution; objective 0.96
+1441901 MIP simplex iterations
+2360 branch-and-bound nodes
+_solve_elapsed_time = 198.526
+
+_nvars = 53550
+
+_ncons = 9390
+
+
+
+####11
+CPLEX 12.7.1.0: mipgap=1e-2
+CPLEX 12.7.1.0: optimal integer solution; objective 0.9
+692666 MIP simplex iterations
+2968 branch-and-bound nodes
+_solve_elapsed_time = 97.5177
+
+_nvars = 53550
+
+_ncons = 9390
+
+
+####10
+CPLEX 12.7.1.0: mipgap=1e-2
+CPLEX 12.7.1.0: optimal integer solution; objective 0.82
+1797380 MIP simplex iterations
+6331 branch-and-bound nodes
+absmipgap = 1.11022e-16, relmipgap = 1.35393e-16
+_solve_elapsed_time = 245.395
+
+_nvars = 53550
+
+_ncons = 9390
+
+
+
+####9
+CPLEX 12.7.1.0: mipgap=1e-2
+CPLEX 12.7.1.0: optimal integer solution; objective 0.76
+608030 MIP simplex iterations
+2615 branch-and-bound nodes
+_solve_elapsed_time = 84.5304
+
+_nvars = 53550
+
+_ncons = 9390
+
+
+####8
+CPLEX 12.7.1.0: optimal integer solution; objective 0.7
+529535 MIP simplex iterations
+501 branch-and-bound nodes
+_solve_elapsed_time = 66.7034
+
+_nvars = 53550
+
+_ncons = 9390
+
+
+
+
+####7
+CPLEX 12.7.1.0: optimal integer solution; objective 0.64
+88207 MIP simplex iterations
+94 branch-and-bound nodes
+absmipgap = 1.11022e-16, relmipgap = 1.73472e-16
+_solve_elapsed_time = 19.6263
+
+_nvars = 53550
+
+_ncons = 9390
+
+
+
+
+####6
+CPLEX 12.7.1.0: optimal integer solution; objective 0.58
+802 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 3.62392
+
+_nvars = 53550
+
+_ncons = 9390
+
+
+
+
+####5
+CPLEX 12.7.1.0: optimal integer solution; objective 0.52
+482 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 2.46981
+
+_nvars = 53550
+
+_ncons = 9390
+
+
+
+####4
+CPLEX 12.7.1.0: optimal integer solution; objective 0.44
+134 MIP simplex iterations
+0 branch-and-bound nodes
+absmipgap = 1.11022e-16, relmipgap = 2.52323e-16
+_solve_elapsed_time = 1.38692
+
+_nvars = 53550
+
+_ncons = 9390
+
+
+
+####3
+CPLEX 12.7.1.0: optimal integer solution; objective 0.36
+16 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 0.843453
+
+_nvars = 53550
+
+_ncons = 9390
+
+
+
+####2
+CPLEX 12.7.1.0: optimal integer solution; objective 0.24
+15 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 0.833499
+
+_nvars = 53550
+
+_ncons = 9390
+
+param nrAGVs = 1;
+CPLEX 12.7.1.0: optimal integer solution; objective 0.1
+16 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 1.07966
+
+_nvars = 53550
+
+_ncons = 9390
+
+#pickupNodes:4 interNodes:4 placeNodes:4
+param startNode = 0;
+param endNode = 13;
+param T = 50.0;
+param nrAGVs = 2;
+param nTasks = 4;
+param travelTask = 0;
+param edgeCap = 1;
+param epsilon = 1;
+param taskLowerBound = 1;
+
+param : ARCS :TAU :=
+0 1 0
+0 2 0
+0 3 0
+0 4 0
+1 2 2
+2 1 2
+2 3 2
+3 2 2
+3 4 2
+4 3 2
+1 5 2
+5 1 2
+2 6 2
+6 2 2
+3 7 2
+7 3 2
+4 8 2
+8 4 2
+5 6 2
+6 5 2
+6 7 2
+7 6 2
+7 8 2
+8 7 2
+5 9 2
+9 5 2
+6 10 2
+10 6 2
+7 11 2
+11 7 2
+8 12 2
+12 8 2
+9 10 2
+10 9 2
+10 11 2
+11 10 2
+11 12 2
+12 11 2
+9 13 0
+10 13 0
+11 13 0
+12 13 0;
+
+param :src_tasks :=
+1 3
+2 2
+3 4
+4 3;
+
+param :snk_tasks :=
+1 11
+2 11
+3 10
+4 9;
