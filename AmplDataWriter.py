@@ -13,7 +13,7 @@ class AmplDataWriter:
     input_layout = "layout.txt"
     output_ampl = "test_data.dat"
 
-    def __init__(self,use_modelspec:bool, path=""):
+    def __init__(self, use_modelspec:bool, path=""):
         self.use_modelspec = use_modelspec
         AmplDataWriter.path = path
         self.numberNodes = ms.pickup_stations + ms.place_stations + ms.intermidiate_nodes
@@ -57,7 +57,7 @@ class AmplDataWriter:
         longestRoute = 0
         for arc in self.arcs:
             if longestRoute < arc.dist: longestRoute = arc.dist
-        return 4*longestRoute
+        return longestRoute*ms.unique_tasks
 
     @staticmethod
     def setParameter(parameter, value, newLine=False,):
@@ -107,7 +107,7 @@ class AmplDataWriter:
 
     def createATask(self)->Task:
         start = rn.randint(1,ms.pickup_stations)
-        stop = rn.randint(0,ms.place_stations)
+        stop = rn.randint(1,ms.place_stations)
         stop += self.numberNodes - ms.place_stations
         return Task(start,stop)
 
