@@ -1,49 +1,122 @@
+
+
+param T = 300:
+CPLEX 12.7.1.0: optimal integer solution; objective 0.16
+29 MIP simplex iterations
+0 branch-and-bound nodes
+absmipgap = 2.77556e-17, relmipgap = 1.73472e-16
+_solve_elapsed_time = 170.144
+
+
+
+
+param T = 288:
+
+
+
+
+param T = 200:
+CPLEX 12.7.1.0: optimal integer solution; objective 0.155
+27 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 93.7637
+
+_nvars = 2334820
+
+_ncons = 166038
+
+param T = 152:
+CPLEX 12.7.1.0: optimal integer solution; objective 0.1513157895
+29 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 53.1559
+_nvars = 1777250
+_ncons = 126390
+
 param T = 144:
 CPLEX 12.7.1.0: optimal integer solution; objective 0.1527777778
 22 MIP simplex iterations
 0 branch-and-bound nodes
+_solve_elapsed_time = 33.6198
+_nvars = 1684320
+_ncons = 119782
 
 param T=100:
 CPLEX 12.7.1.0: optimal integer solution; objective 0.14
 32 MIP simplex iterations
 0 branch-and-bound nodes
+_solve_elapsed_time = 20.894
+
+_nvars = 1173220
+
+_ncons = 83438
+
 
 param T=80:
-ampl: include task2.run;
 CPLEX 12.7.1.0: optimal integer solution; objective 0.1375
 32 MIP simplex iterations
 0 branch-and-bound nodes
+_solve_elapsed_time = 18.5396
+
+_nvars = 940896
+
+_ncons = 66918
 
 param T=72:
 CPLEX 12.7.1.0: optimal integer solution; objective 0.1388888889
 16 MIP simplex iterations
 0 branch-and-bound nodes
+_solve_elapsed_time = 8.01468
+
+_nvars = 847968
+
+_ncons = 60310
+
 
 param T = 70;
 CPLEX 12.7.1.0: integer infeasible.
 578 MIP simplex iterations
 0 branch-and-bound nodes
 No basis.
+_solve_elapsed_time = 21.478
+
+_nvars = 824736
+
+_ncons = 58658
 
 param T = 60;
-ampl: include task2.run;
 CPLEX 12.7.1.0: integer infeasible.
 1142 MIP simplex iterations
 0 branch-and-bound nodes
 No basis.
+_solve_elapsed_time = 13.568
+
+_nvars = 708576
+
+_ncons = 50398
+
 
 param T = 50;
 CPLEX 12.7.1.0: integer infeasible.
 28115 MIP simplex iterations
 0 branch-and-bound nodes
 No basis.
+_solve_elapsed_time = 8.78931
+
+_nvars = 592416
+
+_ncons = 42138
 
 param T = 36.0;
-ampl: include task2.run;
 CPLEX 12.7.1.0: integer infeasible.
-11923 MIP simplex iterations
+13845 MIP simplex iterations
 0 branch-and-bound nodes
 No basis.
+_solve_elapsed_time = 2.56102
+
+_nvars = 429792
+
+_ncons = 30574
 
 
 #pickupNodes:10 interNodes:10 placeNodes:10

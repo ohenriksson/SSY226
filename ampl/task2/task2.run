@@ -4,6 +4,11 @@ model task2.mod;
 data testFile.dat;
 solve;
 option display_1col 0;
+
+display _solve_elapsed_time;
+display _nvars;
+display _ncons;
+
 #option display_round 0;
 
 #display X;

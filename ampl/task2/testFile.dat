@@ -1,7 +1,7 @@
 #pickupNodes:10 interNodes:10 placeNodes:10
 param startNode = 0;
 param endNode = 31;
-param T = 150.0;
+param T = 288.0;
 param nrAGVs = 2;
 param nTasks = 10;
 param travelTask = 0;
