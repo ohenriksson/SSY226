@@ -1,0 +1,389 @@
+param nrAGVs = 80;
+
+
+param nrAGVs = 22;
+CPLEX 12.7.1.0: optimal integer solution; objective 1.75
+46158 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 222.055
+
+_nvars = 1173220
+
+_ncons = 83438
+
+param nrAGVs = 21;
+CPLEX 12.7.1.0: optimal integer solution; objective 1.67
+23774 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 135.761
+
+_nvars = 1173220
+
+_ncons = 83438
+
+
+param nrAGVs = 20;
+CPLEX 12.7.1.0: optimal integer solution; objective 1.59
+16849 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 98.4799
+
+_nvars = 1173220
+
+_ncons = 83438
+
+
+param nrAGVs = 19;
+CPLEX 12.7.1.0: optimal integer solution; objective 1.51
+10939 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 60.7743
+
+_nvars = 1173220
+
+_ncons = 83438
+
+
+param nrAGVs = 18;
+CPLEX 12.7.1.0: optimal integer solution; objective 1.43
+2795 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 36.589
+
+_nvars = 1173220
+
+_ncons = 83438
+
+param nrAGVs = 17;
+CPLEX 12.7.1.0: optimal integer solution; objective 1.35
+411 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 21.0894
+
+_nvars = 1173220
+
+_ncons = 83438
+
+param nrAGVs = 16;
+CPLEX 12.7.1.0: optimal integer solution; objective 1.27
+1167 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 25.6099
+
+_nvars = 1173220
+
+_ncons = 83438
+
+
+param nrAGVs = 15;
+CPLEX 12.7.1.0: optimal integer solution; objective 1.19
+89 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 25.1639
+
+_nvars = 1173220
+
+_ncons = 83438
+
+param nrAGVs = 14;
+CPLEX 12.7.1.0: optimal integer solution; objective 1.11
+1374 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 23.4617
+
+_nvars = 1173220
+
+_ncons = 83438
+
+
+param nrAGVs = 13;
+CPLEX 12.7.1.0: optimal integer solution; objective 1.03
+107 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 19.7324
+
+_nvars = 1173220
+
+_ncons = 83438
+
+
+param nrAGVs = 12;
+CPLEX 12.7.1.0: optimal integer solution; objective 0.95
+90 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 22.3511
+
+_nvars = 1173220
+
+_ncons = 83438
+
+param nrAGVs = 11;
+CPLEX 12.7.1.0: optimal integer solution; objective 0.87
+187 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 18.7431
+
+_nvars = 1173220
+
+_ncons = 83438
+
+param nrAGVs = 10;
+CPLEX 12.7.1.0: optimal integer solution; objective 0.79
+20 MIP simplex iterations
+0 branch-and-bound nodes
+absmipgap = 1.11022e-16, relmipgap = 1.40535e-16
+_solve_elapsed_time = 17.1117
+
+_nvars = 1173220
+
+_ncons = 83438
+
+
+param nrAGVs = 9;
+CPLEX 12.7.1.0: optimal integer solution; objective 0.71
+46 MIP simplex iterations
+0 branch-and-bound nodes
+absmipgap = 1.11022e-16, relmipgap = 1.56369e-16
+_solve_elapsed_time = 19.1775
+
+_nvars = 1173220
+
+_ncons = 83438
+
+param nrAGVs = 8;
+CPLEX 12.7.1.0: optimal integer solution; objective 0.63
+23 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 25.3306
+
+_nvars = 1173220
+
+_ncons = 83438
+
+param nrAGVs = 7;
+CPLEX 12.7.1.0: optimal integer solution; objective 0.55
+21 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 20.8998
+
+_nvars = 1173220
+
+_ncons = 83438
+
+
+param nrAGVs = 6;
+CPLEX 12.7.1.0: optimal integer solution; objective 0.47
+30 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 21.5573
+
+_nvars = 1173220
+
+_ncons = 83438
+
+param nrAGVs = 5;
+CPLEX 12.7.1.0: optimal integer solution; objective 0.39
+19 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 14.6558
+
+_nvars = 1173220
+
+_ncons = 83438
+
+
+
+param nrAGVs = 4;
+CPLEX 12.7.1.0: optimal integer solution; objective 0.31
+28 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 23.3062
+
+_nvars = 1173220
+
+_ncons = 83438
+
+
+param nrAGVs = 3:
+CPLEX 12.7.1.0: optimal integer solution; objective 0.23
+29 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 19.6557
+
+_nvars = 1173220
+
+_ncons = 83438 
+
+param nrAGVs = 2:
+CPLEX 12.7.1.0: optimal integer solution; objective 0.14
+32 MIP simplex iterations
+0 branch-and-bound nodes
+_solve_elapsed_time = 20.3707
+
+_nvars = 1173220
+
+_ncons = 83438
+
+param nrAGVs = 1:
+CPLEX 12.7.1.0: integer infeasible.
+4025 MIP simplex iterations
+0 branch-and-bound nodes
+No basis.
+_solve_elapsed_time = 61.5011
+
+_nvars = 1173220
+
+_ncons = 83438
+
+
+
+
+#pickupNodes:10 interNodes:10 placeNodes:10
+param startNode = 0;
+param endNode = 31;
+param T = 100.0;
+param nTasks = 10;
+param travelTask = 0;
+param edgeCap = 1;
+param epsilon = 1;
+param taskLowerBound = 1;
+
+param : ARCS :TAU :=
+0 1 0
+0 2 0
+0 3 0
+0 4 0
+0 5 0
+0 6 0
+0 7 0
+0 8 0
+0 9 0
+0 10 0
+1 2 2
+2 1 2
+2 3 2
+3 2 2
+3 4 2
+4 3 2
+4 5 2
+5 4 2
+5 6 2
+6 5 2
+6 7 2
+7 6 2
+7 8 2
+8 7 2
+8 9 2
+9 8 2
+9 10 2
+10 9 2
+1 11 2
+11 1 2
+2 12 2
+12 2 2
+3 13 2
+13 3 2
+4 14 2
+14 4 2
+5 15 2
+15 5 2
+6 16 2
+16 6 2
+7 17 2
+17 7 2
+8 18 2
+18 8 2
+9 19 2
+19 9 2
+10 20 2
+20 10 2
+11 12 2
+12 11 2
+12 13 2
+13 12 2
+13 14 2
+14 13 2
+14 15 2
+15 14 2
+15 16 2
+16 15 2
+16 17 2
+17 16 2
+17 18 2
+18 17 2
+18 19 2
+19 18 2
+19 20 2
+20 19 2
+11 21 2
+21 11 2
+12 22 2
+22 12 2
+13 23 2
+23 13 2
+14 24 2
+24 14 2
+15 25 2
+25 15 2
+16 26 2
+26 16 2
+17 27 2
+27 17 2
+18 28 2
+28 18 2
+19 29 2
+29 19 2
+20 30 2
+30 20 2
+21 22 2
+22 21 2
+22 23 2
+23 22 2
+23 24 2
+24 23 2
+24 25 2
+25 24 2
+25 26 2
+26 25 2
+26 27 2
+27 26 2
+27 28 2
+28 27 2
+28 29 2
+29 28 2
+29 30 2
+30 29 2
+21 31 0
+22 31 0
+23 31 0
+24 31 0
+25 31 0
+26 31 0
+27 31 0
+28 31 0
+29 31 0
+30 31 0;
+
+param :src_tasks :=
+1 1
+2 6
+3 3
+4 9
+5 6
+6 5
+7 9
+8 6
+9 4
+10 5;
+
+param :snk_tasks :=
+1 22
+2 28
+3 21
+4 22
+5 29
+6 24
+7 24
+8 30
+9 22
+10 27;

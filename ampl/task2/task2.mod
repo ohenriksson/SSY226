@@ -66,12 +66,12 @@ sum {(n,j) in ARCS, t2 in TASKLIST: n != src_tasks[t2]} X[n,j,t2,k] = 0;
 restrictAGVs: sum {k in TIME, (startNode,j) in ARCS, t in TASK} X[startNode,j,t,k] <= nrAGVs;
 
 #--arctravel num of AGVs travelling on an arc.
-#travel {k in TIME, (i,j) in ARCS}:
-#sum {k_win in k..k+TAU[i,j]-1, t in TASK: k_win <= T} (X[i,j,t,k_win]) <= edgeCap;
+travel {k in TIME, (i,j) in ARCS}:
+sum {k_win in k..k+TAU[i,j]-1, t in TASK: k_win <= T} (X[i,j,t,k_win]) <= edgeCap;
 
 #travel constraint using epsilon
-travel {k in TIME, (i,j) in ARCS}:
-sum {k_win in k..k+epsilon-1, t in TASK: k_win <= T} (X[i,j,t,k_win]) <= edgeCap;
+#travel {k in TIME, (i,j) in ARCS}:
+#sum {k_win in k..k+epsilon-1, t in TASK: k_win <= T} (X[i,j,t,k_win]) <= edgeCap;
 
 
 restrictStartNodeTask: # (always use task 0 since it is not in tasklist)
