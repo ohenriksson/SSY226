@@ -11,8 +11,8 @@
 #   o                               [ ]
 #   o
 
-pickup_stations = 15 
-place_stations = 15
+pickup_stations = 10 
+place_stations = 10
 delivery_distance = 4 #[m] distance in x direction (euclidian distances will be computed)
 grid_layout = True #arcs are only connected to neighbouring nodes
 
@@ -22,7 +22,7 @@ agv_velocity = 1 #[m/s]
 
 
 # --- DANGER ZONE
-allow_tel_back_to_pickup = False#should AGVs teleport back when a task is completed or
+allow_tel_back_to_pickup = False #should AGVs teleport back when a task is completed or
 intermidiate_layers = 1 #layer inbetween pickup and place nodes
 unique_tasks = max(pickup_stations,place_stations) #number of unique deliveries
 intermidiate_nodes = max(pickup_stations,place_stations) #num of nodes for each intermidiate layer

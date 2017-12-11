@@ -1,7 +1,54 @@
+param T = 144:
+CPLEX 12.7.1.0: optimal integer solution; objective 0.1527777778
+22 MIP simplex iterations
+0 branch-and-bound nodes
+
+param T=100:
+CPLEX 12.7.1.0: optimal integer solution; objective 0.14
+32 MIP simplex iterations
+0 branch-and-bound nodes
+
+param T=80:
+ampl: include task2.run;
+CPLEX 12.7.1.0: optimal integer solution; objective 0.1375
+32 MIP simplex iterations
+0 branch-and-bound nodes
+
+param T=72:
+CPLEX 12.7.1.0: optimal integer solution; objective 0.1388888889
+16 MIP simplex iterations
+0 branch-and-bound nodes
+
+param T = 70;
+CPLEX 12.7.1.0: integer infeasible.
+578 MIP simplex iterations
+0 branch-and-bound nodes
+No basis.
+
+param T = 60;
+ampl: include task2.run;
+CPLEX 12.7.1.0: integer infeasible.
+1142 MIP simplex iterations
+0 branch-and-bound nodes
+No basis.
+
+param T = 50;
+CPLEX 12.7.1.0: integer infeasible.
+28115 MIP simplex iterations
+0 branch-and-bound nodes
+No basis.
+
+param T = 36.0;
+ampl: include task2.run;
+CPLEX 12.7.1.0: integer infeasible.
+11923 MIP simplex iterations
+0 branch-and-bound nodes
+No basis.
+
+
 #pickupNodes:10 interNodes:10 placeNodes:10
 param startNode = 0;
 param endNode = 31;
-param T = 150.0;
 param nrAGVs = 2;
 param nTasks = 10;
 param travelTask = 0;
