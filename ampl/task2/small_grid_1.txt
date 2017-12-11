@@ -1,18 +1,43 @@
-####18
+####20
 
 
 
-####17
-CPLEX 12.7.1.0: absmipgap=1e-1
-CPLEX 12.7.1.0: optimal integer solution within mipgap or absmipgap; objective 1.16
-784995 MIP simplex iterations
-1618 branch-and-bound nodes
-absmipgap = 0.0957203, relmipgap = 0.0825175
-_solve_elapsed_time = 201.466
+####19
+CPLEX 12.7.1.0: absmipgap=2e-1
+CPLEX 12.7.1.0: optimal integer solution within mipgap or absmipgap; objective 1.14
+283092 MIP simplex iterations
+415 branch-and-bound nodes
+absmipgap = 0.193789, relmipgap = 0.16999
+_solve_elapsed_time = 56.6834
 
 _nvars = 53550
 
 _ncons = 9390
+
+
+
+####18
+CPLEX 12.7.1.0: absmipgap=2e-1
+CPLEX 12.7.1.0: optimal integer solution within mipgap or absmipgap; objective 1.14
+347613 MIP simplex iterations
+635 branch-and-bound nodes
+absmipgap = 0.155496, relmipgap = 0.1364
+_solve_elapsed_time = 67.2194
+
+_nvars = 53550
+
+_ncons = 9390
+
+
+####17
+CPLEX 12.7.1.0: absmipgap=2e-1
+CPLEX 12.7.1.0: optimal integer solution within mipgap or absmipgap; objective 1.1
+224067 MIP simplex iterations
+504 branch-and-bound nodes
+absmipgap = 0.165746, relmipgap = 0.150678
+_solve_elapsed_time = 49.0047
+
+_nvars = 53550
 
 
 ####16

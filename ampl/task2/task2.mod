@@ -29,7 +29,7 @@ param snk_tasks {TASKLIST}; #sink for each task
 #---VARIABLES
 var X {NODES,NODES,TASK,TIME} integer >= 0, <= edgeCap; # Indicator for sending an AGV on an arc.
 var Y {NODES,TASK,TIME} integer >= 0, <=nodeCap; # Indicator for an AGV arriving at a node
-
+var AGVS;
 
 
 #---OBJ FUNCTION
@@ -63,7 +63,9 @@ sum {(n,j) in ARCS, t2 in TASKLIST: n != src_tasks[t2]} X[n,j,t2,k] = 0;
 
 # --agvs in the intermediate nodes at t=0
 # nAGVs_interStart: sum{t in TASK, i in INTER} Y[i,t,0] = 0;
-restrictAGVs: sum {k in TIME, (startNode,j) in ARCS, t in TASK} X[startNode,j,t,k] <= nrAGVs;
+restrictAGVs: sum {k in TIME, (startNode,j) in ARCS, t in TASK} X[startNode,j,t,k] = AGVS;
+restrictAGVs2: AGVS <= nrAGVs;
+restrictAGVs3: sum {k in TIME, (j,endNode) in ARCS, t in TASK} X[j,endNode,t,k] = AGVS;
 
 #--arctravel num of AGVs travelling on an arc.
 travel {k in TIME, (i,j) in ARCS}:
