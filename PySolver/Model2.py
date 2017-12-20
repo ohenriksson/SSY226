@@ -34,11 +34,13 @@ class Model2:
 
     @classmethod
     def objective_f(cls, prob):
+        taskSum = []
         for k in cls.TIME:
             for tsk in cls.TASKLIST:
                 taskN = cls.snk_tasks[tsk]
-                label = 'obj_' +str(taskN) + '_' +str(k) +'_' +str(tsk)
-                prob += lpSum( cls.Y[taskN][tsk][k] )/cls.T , label
+                taskSum += [cls.Y[taskN][tsk][k]]
+        label = 'obj_'
+        prob += lpSum(taskSum)/cls.T , label
 
     @classmethod
     def detector(cls, prob):
