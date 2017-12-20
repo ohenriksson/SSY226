@@ -17,8 +17,11 @@ class Model2:
     TASK = range(3)
     TASKLIST = TASK[1:]
     TIME = range(T)
-    ARCS = [[3, 2, 2], [3, 2, 1], [3, 2, 1]]
-    
+    ARCS = [[3, 1, 2], [3, 2, 1], [3, 2, 1]]
+    a_src = 0
+    a_snk = 1
+    a_dst = 2
+
     Y = LpVariable.dicts('Choice', (NODES, TASK, TIME), lowBound=0, upBound=0, cat=LpInteger)
     X = LpVariable.dicts('Choice', (NODES, NODES, TASK, TIME), lowBound=0, upBound=edgeCap, cat=LpInteger)
 
@@ -42,8 +45,10 @@ class Model2:
         for k in cls.TIME:
             for t in cls.TASK:
                 for v0 in cls.NODES:
+                   arcs = list(filter(lambda s: s[cls.a_snk] == v0 and k-s[cls.a_dst] >= 0, cls.ARCS))
                    label = 'detector_' +str(k) + '_' +str(t) +'_' +str(v0)
-                   prob += lpSum(cls.X[v0][0][t][k]) == cls.Y[v0][t][k], label
+                   incoming = [cls.X[a[cls.a_src]][v0][t][k-a[cls.a_dst]] for a in arcs]
+                   prob += lpSum(incoming) == cls.Y[v0][t][k], label
 
 
 
