@@ -24,7 +24,7 @@ class Model2:
     a_snk = 1
     a_dst = 2
 
-    Y = LpVariable.dicts('Y', (NODES, TASK, TIME), lowBound=0, upBound=nodeCap, cat=LpInteger)
+    Y = LpVariable.dicts('Y', (NODES, TASK, TIME), lowBound=0, cat=LpInteger)
     X = LpVariable.dicts('X', (NODES, NODES, TASK, TIME), lowBound=0, upBound=edgeCap, cat=LpInteger)
 
     @classmethod
@@ -33,6 +33,9 @@ class Model2:
         cls.objective_f(prob)
         cls.detector(prob)
         cls.inflow_outflow(prob)
+        cls.tasks_must_go_on(prob)
+        cls.tasks_must_be_dropped(prob)
+        cls.node_capacity(prob)
 
         #prob.writeLP("MinmaxProblem.lp")
         prob.solve()
@@ -82,11 +85,25 @@ class Model2:
                     prob += constraint, ""
 
     @classmethod
+    def tasks_must_be_dropped(cls,prob):
+        for k in cls.TIME:
+            for t in cls.TASKLIST:
+                for v0 in list(filter(lambda v: v == cls.snk_tasks[t],cls.INTER)):
+                    arcsIn = cls.arcs_ending_here(v0,k)
+                    prob += lpSum([cls.X[a[cls.a_src]][v0][t][k] for a in arcsIn]) == 0
+
+    @classmethod
+    def node_capacity(cls,prob):
+        for k in cls.TIME:
+            for v0 in cls.INTER:
+                prob += lpSum([cls.Y[v0][t][k] for t in cls.TASK]) <= cls.nodeCap, ""
+
+    @classmethod
     def arcs_ending_here(cls, v0, k)->[]:
         arcs = list(filter(lambda s: s[cls.a_snk] == v0 and k-s[cls.a_dst] >= 0, cls.ARCS))
         return arcs
 
     @classmethod
-    def arcs_starting_here(cls, v0, k)->[]:
+    def arcs_starting_here(cls, v0,k)->[]:
         arcs = list(filter(lambda s: s[cls.a_src] == v0 , cls.ARCS))
         return arcs
