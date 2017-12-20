@@ -17,20 +17,30 @@ class Model2:
     TASK = range(3)
     TASKLIST = TASK[1:]
     TIME = range(T)
+    INTER = NODES[1:-2]
+
     ARCS = [[3, 1, 2], [3, 2, 1], [3, 2, 1]]
+
     a_src = 0
     a_snk = 1
     a_dst = 2
 
-    Y = LpVariable.dicts('Choice', (NODES, TASK, TIME), lowBound=0, upBound=0, cat=LpInteger)
-    X = LpVariable.dicts('Choice', (NODES, NODES, TASK, TIME), lowBound=0, upBound=edgeCap, cat=LpInteger)
+    Y = LpVariable.dicts('Y', (NODES, TASK, TIME), lowBound=0, upBound=0, cat=LpInteger)
+    X = LpVariable.dicts('X', (NODES, NODES, TASK, TIME), lowBound=0, upBound=edgeCap, cat=LpInteger)
 
     @classmethod
     def init(cls):
         prob = LpProblem("Task Optimizer", LpMaximize)
         cls.objective_f(prob)
         cls.detector(prob)
-        #print(prob)
+        cls.inflow_outflow(prob)
+
+        #prob.writeLP("MinmaxProblem.lp")
+        prob.solve()
+
+        for v in prob.variables():
+            print(v.name, "=", v.varValue)
+        print( "Total Cost =", pulp.value(prob.objective))
 
     @classmethod
     def objective_f(cls, prob):
@@ -47,10 +57,32 @@ class Model2:
         for k in cls.TIME:
             for t in cls.TASK:
                 for v0 in cls.NODES:
-                   arcs = list(filter(lambda s: s[cls.a_snk] == v0 and k-s[cls.a_dst] >= 0, cls.ARCS))
+                   arcs = cls.arcs_ending_here(v0, k)
                    label = 'detector_' +str(k) + '_' +str(t) +'_' +str(v0)
                    incoming = [cls.X[a[cls.a_src]][v0][t][k-a[cls.a_dst]] for a in arcs]
                    prob += lpSum(incoming) == cls.Y[v0][t][k], label
 
 
+    @classmethod
+    def inflow_outflow(cls, prob):
+        for k in cls.TIME:
+            for v0 in cls.INTER:
+                arcsIn = cls.arcs_ending_here(v0,k)
+                arcsOut = cls.arcs_starting_here(v0,k)
+                inArcs = [[ cls.X[a[cls.a_src]][a[cls.a_snk]][t][k-a[cls.a_dst]] for t in cls.TASK] for a in arcsIn]
+                outArcs =[[ cls.X[a[cls.a_src]][a[cls.a_snk]][t][k] for t in cls.TASK] for a in arcsOut]
+                prob += lpSum(inArcs) == lpSum(outArcs), ""
 
+    @classmethod
+    def tasks_must_go_on(cls,prob):
+        return
+
+    @classmethod
+    def arcs_ending_here(cls, v0, k)->[]:
+        arcs = list(filter(lambda s: s[cls.a_snk] == v0 and k-s[cls.a_dst] >= 0, cls.ARCS))
+        return arcs
+
+    @classmethod
+    def arcs_starting_here(cls, v0, k)->[]:
+        arcs = list(filter(lambda s: s[cls.a_src] == v0 , cls.ARCS))
+        return arcs
