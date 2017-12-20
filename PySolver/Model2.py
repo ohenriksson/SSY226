@@ -74,8 +74,13 @@ class Model2:
                 prob += lpSum(inArcs) == lpSum(outArcs), ""
 
     @classmethod
-    def tasks_must_go_on(cls,prob):
-        return
+    def tasks_must_go_on(cls, prob):
+        for k in cls.TIME:
+            for t in cls.TASKLIST:
+                for v0 in cls.INTER:
+                    arcsOut = cls.arcs_starting_here(v0,k)
+                    constraint = cls.Y[v0][t][k] == lpSum([ cls.X[a[cls.a_src]][a[cls.a_snk]][t][k] for a in arcsOut])
+                    prob += constraint, ""
 
     @classmethod
     def arcs_ending_here(cls, v0, k)->[]:
