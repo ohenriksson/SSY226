@@ -36,6 +36,7 @@ class Model2:
         cls.tasks_must_go_on(prob)
         cls.tasks_must_be_dropped(prob)
         cls.node_capacity(prob)
+        cls.tasks_lower_bound(prob)
 
         #prob.writeLP("MinmaxProblem.lp")
         prob.solve()
@@ -85,12 +86,18 @@ class Model2:
                     prob += constraint, ""
 
     @classmethod
-    def tasks_must_be_dropped(cls,prob):
+    def tasks_must_be_dropped(cls, prob):
         for k in cls.TIME:
             for t in cls.TASKLIST:
                 for v0 in list(filter(lambda v: v == cls.snk_tasks[t],cls.INTER)):
                     arcsIn = cls.arcs_ending_here(v0,k)
                     prob += lpSum([cls.X[a[cls.a_src]][v0][t][k] for a in arcsIn]) == 0
+
+    @classmethod
+    def tasks_lower_bound(cls, prob):
+        for t in cls.TASKLIST:
+            taskSum = [cls.Y[cls.snk_tasks[t]][t][k] for k in cls.TIME]
+            prob += lpSum(taskSum) >= cls.taskLowerBound
 
     @classmethod
     def node_capacity(cls,prob):
