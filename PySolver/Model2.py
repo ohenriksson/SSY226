@@ -10,22 +10,21 @@ class Model2:
     edgeCap = 1
     T = 10
 
-    snk_tasks = [0, 2,1]
-    src_tasks = [0, 1,2]
+    snk_tasks = [0,1,3]
+    src_tasks = [0,1,2]
 
-    NODES = range(10)
+    NODES = range(5)
     TASK = range(3)
     TASKLIST = TASK[1:]
     TIME = range(T)
-    INTER = NODES[1:-2]
-
-    ARCS = [[3, 1, 2], [3, 2, 1], [3, 2, 1]]
+    INTER = NODES[1:-1]
+    ARCS = [[0, 1, 0], [1, 2, 1], [2, 3, 4], [3,4,0]]
 
     a_src = 0
     a_snk = 1
     a_dst = 2
 
-    Y = LpVariable.dicts('Y', (NODES, TASK, TIME), lowBound=0, upBound=0, cat=LpInteger)
+    Y = LpVariable.dicts('Y', (NODES, TASK, TIME), lowBound=0, upBound=nodeCap, cat=LpInteger)
     X = LpVariable.dicts('X', (NODES, NODES, TASK, TIME), lowBound=0, upBound=edgeCap, cat=LpInteger)
 
     @classmethod
@@ -40,7 +39,7 @@ class Model2:
 
         for v in prob.variables():
             print(v.name, "=", v.varValue)
-        print( "Total Cost =", pulp.value(prob.objective))
+        print( "Throughput :", pulp.value(prob.objective))
 
     @classmethod
     def objective_f(cls, prob):
