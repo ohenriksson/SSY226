@@ -2,6 +2,9 @@ from pulp import *
 
 
 class Model2:
+    epsilonTravel = 1
+    useEpsilon = False
+
     startNode = 1
     endNode = 2
     travelTask = 0
@@ -10,7 +13,7 @@ class Model2:
     edgeCap = 1
     T = 10
 
-    snk_tasks = [0,1,3]
+    snk_tasks = [1,1,3]
     src_tasks = [0,1,2]
 
     NODES = range(5)
@@ -33,10 +36,12 @@ class Model2:
         cls.objective_f(prob)
         cls.detector(prob)
         cls.inflow_outflow(prob)
+        cls.arctravel_capacity(prob)
         cls.tasks_must_go_on(prob)
         cls.tasks_must_be_dropped(prob)
         cls.node_capacity(prob)
         cls.tasks_lower_bound(prob)
+        # cls.start_node_task(prob) #not working atm
 
         #prob.writeLP("MinmaxProblem.lp")
         prob.solve()
@@ -76,6 +81,15 @@ class Model2:
                 outArcs =[[ cls.X[a[cls.a_src]][a[cls.a_snk]][t][k] for t in cls.TASK] for a in arcsOut]
                 prob += lpSum(inArcs) == lpSum(outArcs), ""
 
+
+    @classmethod
+    def arctravel_capacity(cls, prob):
+        for k in cls.TIME:
+            for a in cls.ARCS:
+                useTime = k+cls.epsilonTravel if cls.useEpsilon else k+a[cls.a_dst]-1
+                travelWindow = range(k, min(useTime, cls.T))
+                prob += lpSum([[cls.X[a[cls.a_src]][a[cls.a_snk]][t][k_win] for k_win in travelWindow] for t in cls.TASK]) <= cls.edgeCap
+
     @classmethod
     def tasks_must_go_on(cls, prob):
         for k in cls.TIME:
@@ -106,11 +120,19 @@ class Model2:
                 prob += lpSum([cls.Y[v0][t][k] for t in cls.TASK]) <= cls.nodeCap, ""
 
     @classmethod
+    def start_node_task(cls, prob):
+        for k in cls.TIME:
+            for t in cls.TASKLIST:
+                for v0 in cls.arcs_starting_here(cls.startNode):
+                    arcDest = v0[cls.a_snk]
+                    prob += cls.X[cls.startNode][arcDest][t][k] == 0, ""
+
+    @classmethod
     def arcs_ending_here(cls, v0, k)->[]:
         arcs = list(filter(lambda s: s[cls.a_snk] == v0 and k-s[cls.a_dst] >= 0, cls.ARCS))
         return arcs
 
     @classmethod
-    def arcs_starting_here(cls, v0,k)->[]:
+    def arcs_starting_here(cls, v0, k=0)->[]:
         arcs = list(filter(lambda s: s[cls.a_src] == v0 , cls.ARCS))
         return arcs
