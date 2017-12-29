@@ -1,5 +1,22 @@
 from pulp import *
 import model1 as data
+from enum import IntEnum
+
+
+class A(IntEnum):
+    SRC = 0
+    SNK = 1
+    DST = 2
+
+
+def count_nodes(arcs):
+    highestnum = 0
+    for a in arcs:
+        if a[A.SNK] > highestnum:
+            highestnum = a[A.SNK]
+        elif a[A.SRC] > highestnum:
+            highestnum = a[A.SRC]
+    return highestnum+1
 
 
 class Model2:
@@ -22,12 +39,9 @@ class Model2:
     TASK = range(snk_tasks.__len__())
     TASKLIST = TASK[1:]
     TIME = range(T)
-    NODES = []
-    INTER = []
 
-    a_src = 0
-    a_snk = 1
-    a_dst = 2
+    NODES = range(count_nodes(ARCS))
+    INTER = NODES[1:-1]
 
     Y = LpVariable.dicts('Y', (NODES, TASK, TIME), lowBound=0, cat=LpInteger)
     X = LpVariable.dicts('X', (NODES, NODES, TASK, TIME), lowBound=0, upBound=edgeCap, cat=LpInteger)
@@ -35,9 +49,6 @@ class Model2:
 
     @classmethod
     def init(cls):
-        cls.NODES = range(cls.count_nodes(cls.ARCS))
-        cls.INTER = cls.NODES[1:-1]
-
         prob = LpProblem("Task Optimizer", LpMaximize)
         cls.objective_f(prob)
         cls.detector(prob)
@@ -58,18 +69,6 @@ class Model2:
                 print(v.name, "=", v.varValue)
         print( "Throughput :", pulp.value(prob.objective))
 
-    @staticmethod
-    def count_nodes(arcs):
-        cls = Model2
-        highestnum = 0
-        for a in arcs:
-            if a[cls.a_snk] > highestnum:
-                highestnum = a[cls.a_snk]
-            elif a[cls.a_src] > highestnum:
-                highestnum = a[cls.a_src]
-        return highestnum
-
-
     @classmethod
     def objective_f(cls, prob):
         taskSum = []
@@ -87,7 +86,7 @@ class Model2:
                 for v0 in cls.NODES:
                    arcs = cls.arcs_ending_at(v0, k)
                    label = 'detector_' +str(k) + '_' +str(t) +'_' +str(v0)
-                   incoming = [cls.X[a[cls.a_src]][v0][t][k-a[cls.a_dst]] for a in arcs]
+                   incoming = [cls.X[a[A.SRC]][v0][t][k-a[A.DST]] for a in arcs]
                    prob += lpSum(incoming) == cls.Y[v0][t][k], label
 
 
@@ -97,8 +96,8 @@ class Model2:
             for v0 in cls.INTER:
                 arcsIn = cls.arcs_ending_at(v0, k)
                 arcsOut = cls.arcs_starting_here(v0,k)
-                inArcs = [[ cls.X[a[cls.a_src]][a[cls.a_snk]][t][k-a[cls.a_dst]] for t in cls.TASK] for a in arcsIn]
-                outArcs =[[ cls.X[a[cls.a_src]][a[cls.a_snk]][t][k] for t in cls.TASK] for a in arcsOut]
+                inArcs = [[ cls.X[a[A.SRC]][a[A.SNK]][t][k-a[A.DST]] for t in cls.TASK] for a in arcsIn]
+                outArcs =[[ cls.X[a[A.SRC]][a[A.SNK]][t][k] for t in cls.TASK] for a in arcsOut]
                 prob += lpSum(inArcs) == lpSum(outArcs), ""
 
 
@@ -106,9 +105,9 @@ class Model2:
     def arctravel_capacity(cls, prob):
         for k in cls.TIME:
             for a in cls.ARCS:
-                useTime = k+cls.epsilonTravel if cls.useEpsilon else k+a[cls.a_dst]-1
+                useTime = k+cls.epsilonTravel if cls.useEpsilon else k+a[A.DST]-1
                 travelWindow = range(k, min(useTime, cls.T))
-                prob += lpSum([[cls.X[a[cls.a_src]][a[cls.a_snk]][t][k_win] for k_win in travelWindow] for t in cls.TASK]) <= cls.edgeCap
+                prob += lpSum([[cls.X[a[A.SRC]][a[A.SNK]][t][k_win] for k_win in travelWindow] for t in cls.TASK]) <= cls.edgeCap
 
     @classmethod
     def tasks_must_go_on(cls, prob):
@@ -116,7 +115,7 @@ class Model2:
             for t in cls.TASKLIST:
                 for v0 in list(filter(lambda v: v != cls.src_tasks[t] and v != cls.snk_tasks[t], cls.INTER)):
                     arcsOut = cls.arcs_starting_here(v0, k)
-                    prob += cls.Y[v0][t][k] == lpSum([ cls.X[a[cls.a_src]][a[cls.a_snk]][t][k] for a in arcsOut])
+                    prob += cls.Y[v0][t][k] == lpSum([ cls.X[a[A.SRC]][a[A.SNK]][t][k] for a in arcsOut])
 
     @classmethod
     def tasks_must_be_dropped(cls, prob):
@@ -124,7 +123,7 @@ class Model2:
             for t in cls.TASKLIST:
                 for v0 in list(filter(lambda v: v == cls.snk_tasks[t], cls.INTER)):
                     arcsOut = cls.arcs_starting_here(v0)
-                    prob += lpSum([cls.X[a[cls.a_src]][v0][t][k] for a in arcsOut]) == 0
+                    prob += lpSum([cls.X[a[A.SRC]][v0][t][k] for a in arcsOut]) == 0
 
     @classmethod
     def tasks_lower_bound(cls, prob):
@@ -143,7 +142,7 @@ class Model2:
         for k in cls.TIME:
             for t in cls.TASKLIST:
                 for v0 in cls.arcs_starting_here(cls.startNode):
-                    arcDest = v0[cls.a_snk]
+                    arcDest = v0[A.SNK]
                     prob += cls.X[cls.startNode][arcDest][t][k] == 0, ""
 
     @classmethod
@@ -154,8 +153,8 @@ class Model2:
     def agv_counter(cls,prob):
          startArcs = cls.arcs_starting_here(cls.startNode)
          endArcs = cls.arcs_ending_here(cls.endNode)
-         startSum = list(cls.X[a[cls.a_src]][a[cls.a_snk]] for a in startArcs)
-         endSum = [cls.X[a[cls.a_src]][a[cls.a_snk]] for a in endArcs]
+         startSum = list(cls.X[a[A.SRC]][a[A.SNK]] for a in startArcs)
+         endSum = [cls.X[a[A.SRC]][a[A.SNK]] for a in endArcs]
          prob += lpSum(startSum) == lpSum(endSum), "agv restrictor"
          prob += lpSum(startSum) == cls.AGVS, "counter"
 
@@ -163,12 +162,12 @@ class Model2:
     @classmethod
     def arcs_ending_at(cls, v0, k)->[]:
         arcs = cls.arcs_ending_here(v0)
-        return list(filter(lambda s: k-s[cls.a_dst] >= 0, arcs))
+        return list(filter(lambda s: k-s[A.DST] >= 0, arcs))
 
     @classmethod
     def arcs_ending_here(cls,v0)->[]:
-        return list(filter(lambda s: s[cls.a_snk] == v0, cls.ARCS))
+        return list(filter(lambda s: s[A.SNK] == v0, cls.ARCS))
 
     @classmethod
     def arcs_starting_here(cls, v0, k=0)->[]:
-        return list(filter(lambda s: s[cls.a_src] == v0 , cls.ARCS))
+        return list(filter(lambda s: s[A.SRC] == v0 , cls.ARCS))
