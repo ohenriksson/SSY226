@@ -1,28 +1,29 @@
 from pulp import *
+import model1 as data
 
 
 class Model2:
-    epsilonTravel = 1
-    useEpsilon = False
+    epsilonTravel = data.epsilonTravel
+    useEpsilon = data.useEpsilon
 
-    startNode = 1
-    endNode = 2
-    travelTask = 0
-    taskLowerBound = 1
-    nodeCap = 1
-    edgeCap = 1
-    T = 25
-    agvMax = 2
+    startNode = data.startNode
+    endNode = data.endNode
+    travelTask = data.travelTask
+    taskLowerBound = data.taskLowerBound
+    nodeCap = data.nodeCap
+    edgeCap = data.edgeCap
+    T = data.T
+    agvMax = data.agv
 
-    snk_tasks = [1,1,3]
-    src_tasks = [0,1,2]
+    snk_tasks = data.snk_tasks
+    src_tasks = data.src_tasks
 
-    NODES = range(5)
-    TASK = range(3)
+    ARCS = data.arcs
+    TASK = range(snk_tasks.__len__())
     TASKLIST = TASK[1:]
     TIME = range(T)
-    INTER = NODES[1:-1]
-    ARCS = [[0, 1, 0], [1, 2, 1], [2, 3, 4], [3,4,0]]
+    NODES = []
+    INTER = []
 
     a_src = 0
     a_snk = 1
@@ -30,10 +31,13 @@ class Model2:
 
     Y = LpVariable.dicts('Y', (NODES, TASK, TIME), lowBound=0, cat=LpInteger)
     X = LpVariable.dicts('X', (NODES, NODES, TASK, TIME), lowBound=0, upBound=edgeCap, cat=LpInteger)
-    AGVS = LpVariable('AGVS',lowBound=0, upBound=agvMax, cat=LpInteger)
+    AGVS = LpVariable('AGVS', lowBound=0, upBound=agvMax, cat=LpInteger)
 
     @classmethod
     def init(cls):
+        cls.NODES = range(cls.count_nodes(cls.ARCS))
+        cls.INTER = cls.NODES[1:-1]
+
         prob = LpProblem("Task Optimizer", LpMaximize)
         cls.objective_f(prob)
         cls.detector(prob)
@@ -53,6 +57,18 @@ class Model2:
             if v.varValue > 0:
                 print(v.name, "=", v.varValue)
         print( "Throughput :", pulp.value(prob.objective))
+
+    @staticmethod
+    def count_nodes(arcs):
+        cls = Model2
+        highestnum = 0
+        for a in arcs:
+            if a[cls.a_snk] > highestnum:
+                highestnum = a[cls.a_snk]
+            elif a[cls.a_src] > highestnum:
+                highestnum = a[cls.a_src]
+        return highestnum
+
 
     @classmethod
     def objective_f(cls, prob):
