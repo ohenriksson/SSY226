@@ -107,8 +107,8 @@ class Model2:
         for k in cls.TIME:
             for t in cls.TASKLIST:
                 for v0 in list(filter(lambda v: v == cls.snk_tasks[t], cls.INTER)):
-                    arcsIn = cls.arcs_ending_at(v0, k)
-                    prob += lpSum([cls.X[a[cls.a_src]][v0][t][k] for a in arcsIn]) == 0
+                    arcsOut = cls.arcs_starting_here(v0)
+                    prob += lpSum([cls.X[a[cls.a_src]][v0][t][k] for a in arcsOut]) == 0
 
     @classmethod
     def tasks_lower_bound(cls, prob):
