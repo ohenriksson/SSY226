@@ -11,7 +11,7 @@ class Model2:
     taskLowerBound = 1
     nodeCap = 1
     edgeCap = 1
-    T = 18
+    T = 25
     agvMax = 2
 
     snk_tasks = [1,1,3]
@@ -98,11 +98,9 @@ class Model2:
     def tasks_must_go_on(cls, prob):
         for k in cls.TIME:
             for t in cls.TASKLIST:
-                for v0 in cls.INTER:
-                    if v0 != cls.src_tasks[t] and v0 != cls.snk_tasks[t]:
-                        arcsOut = cls.arcs_starting_here(v0,k)
-                        constraint = cls.Y[v0][t][k] == lpSum([ cls.X[a[cls.a_src]][a[cls.a_snk]][t][k] for a in arcsOut])
-                        prob += constraint, ""
+                for v0 in list(filter(lambda v: v != cls.src_tasks[t] and v != cls.snk_tasks[t], cls.INTER)):
+                    arcsOut = cls.arcs_starting_here(v0, k)
+                    prob += cls.Y[v0][t][k] == lpSum([ cls.X[a[cls.a_src]][a[cls.a_snk]][t][k] for a in arcsOut])
 
     @classmethod
     def tasks_must_be_dropped(cls, prob):
