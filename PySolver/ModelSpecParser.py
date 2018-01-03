@@ -17,18 +17,18 @@ class ModelSpecParser:
     interLayers = []
 
     @classmethod
-    def parse(cls)->None:
+    def parse(cls, pickle_name='model1.pickle')->None:
         cls.generateNodes()
         cls.generateArcs()
         cls.createAllTasks()
         cls.timeFrame = cls.calculateTimeFrame(cls.arcs)
-        cls.savePickle(cls.generateDataStruct())
+        cls.savePickle(cls.generateDataStruct(), pickle_name)
         return
 
     @classmethod
-    def savePickle(cls, data)->None:
-        pickle_out = open('model1.pickle','wb')
-        pickle.dump(data,pickle_out)
+    def savePickle(cls, data, pickle_name:str)->None:
+        pickle_out = open(pickle_name, 'wb')
+        pickle.dump(data, pickle_out)
         pickle_out.close()
 
     @classmethod
