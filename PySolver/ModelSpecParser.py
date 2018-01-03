@@ -64,7 +64,7 @@ class ModelSpecParser:
         longestRoute = 0
         for arc in arcs:
             longestRoute = arc.dist if longestRoute < arc.dist else longestRoute
-        return int(longestRoute*ms.unique_tasks)*4
+        return int(longestRoute*ms.unique_tasks)
 
     @staticmethod
     def setParameter(parameter, value, newLine=False,):

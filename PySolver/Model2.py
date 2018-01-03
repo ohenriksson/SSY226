@@ -24,6 +24,7 @@ class Model2:
     def load(cls, modelName = 'model1.pickle'):
         indata_pickle = open(modelName,'rb')
         data = pickle.load(indata_pickle)
+        print(data)
 
         cls.epsilonTravel = data[md.epsilonTravel]
         cls.useEpsilon = data[md.useEpsilon]
@@ -67,7 +68,7 @@ class Model2:
         cls.start_node_task(prob) #does not seem to restrict further
         cls.agv_number_restrictions(prob)
 
-        #prob.writeLP("MinmaxProblem.lp")
+        prob.writeLP("MinmaxProblem.lp")
         prob.solve()
 
         for v in prob.variables():
@@ -83,8 +84,7 @@ class Model2:
             for tsk in cls.TASKLIST:
                 taskN = cls.snk_tasks[tsk]
                 taskSum += [cls.Y[taskN][tsk][k]]
-        label = 'obj_'
-        prob += lpSum(taskSum)/cls.T , label
+        prob += lpSum(taskSum)/cls.T
 
     @classmethod
     def detector(cls, prob):
@@ -94,7 +94,8 @@ class Model2:
                    arcs = cls.arcs_ending_at(v0, k)
                    label = 'detector_' +str(k) + '_' +str(t) +'_' +str(v0)
                    incoming = [cls.X[a[A.SRC]][v0][t][k-a[A.DST]] for a in arcs]
-                   prob += lpSum(incoming) == cls.Y[v0][t][k], label
+                   if incoming.__len__() > 0:
+                       prob += lpSum(incoming) == cls.Y[v0][t][k]
 
 
     @classmethod
@@ -102,10 +103,10 @@ class Model2:
         for k in cls.TIME:
             for v0 in cls.INTER:
                 arcsIn = cls.arcs_ending_at(v0, k)
-                arcsOut = cls.arcs_starting_here(v0,k)
+                arcsOut = cls.arcs_starting_here(v0, k)
                 inArcs = [[ cls.X[a[A.SRC]][a[A.SNK]][t][k-a[A.DST]] for t in cls.TASK] for a in arcsIn]
                 outArcs =[[ cls.X[a[A.SRC]][a[A.SNK]][t][k] for t in cls.TASK] for a in arcsOut]
-                prob += lpSum(inArcs) == lpSum(outArcs), ""
+                prob += lpSum(inArcs) == lpSum(outArcs)
 
 
     @classmethod
@@ -114,7 +115,10 @@ class Model2:
             for a in cls.ARCS:
                 useTime = min(k+a[A.DST]-1, cls.epsilonTravel) if cls.useEpsilon else k+a[A.DST]-1
                 travelWindow = range(k, min(useTime, cls.T))
-                prob += lpSum([[cls.X[a[A.SRC]][a[A.SNK]][t][k_win] for k_win in travelWindow] for t in cls.TASK]) <= cls.edgeCap
+                if travelWindow.__len__() > 0:
+                    arcWindow = [[cls.X[a[A.SRC]][a[A.SNK]][t][k_win] for k_win in travelWindow] for t in cls.TASK]
+                    prob += lpSum(arcWindow) <= cls.edgeCap
+
 
     @classmethod
     def tasks_must_go_on(cls, prob):
@@ -142,7 +146,7 @@ class Model2:
     def node_capacity(cls,prob):
         for k in cls.TIME:
             for v0 in cls.INTER:
-                prob += lpSum([cls.Y[v0][t][k] for t in cls.TASK]) <= cls.nodeCap, ""
+                prob += lpSum([cls.Y[v0][t][k] for t in cls.TASK]) <= cls.nodeCap
 
     @classmethod
     def start_node_task(cls, prob):
@@ -150,7 +154,7 @@ class Model2:
             for t in cls.TASKLIST:
                 for v0 in cls.arcs_starting_here(cls.startNode):
                     arcDest = v0[A.SNK]
-                    prob += cls.X[cls.startNode][arcDest][t][k] == 0, ""
+                    prob += cls.X[cls.startNode][arcDest][t][k] == 0
 
     @classmethod
     def agv_number_restrictions(cls, prob):
@@ -162,8 +166,8 @@ class Model2:
          endArcs = cls.arcs_ending_here(cls.endNode)
          startSum = [cls.X[a[A.SRC]][a[A.SNK]] for a in startArcs]
          endSum = [cls.X[a[A.SRC]][a[A.SNK]] for a in endArcs]
-         prob += lpSum(startSum) == lpSum(endSum), "agv restrictor"
-         prob += lpSum(startSum) == cls.AGVS, "counter"
+         prob += lpSum(startSum) == lpSum(endSum)
+         prob += lpSum(startSum) == cls.AGVS
 
 
     @classmethod
