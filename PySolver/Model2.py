@@ -111,7 +111,7 @@ class Model2:
     def arctravel_capacity(cls, prob):
         for k in cls.TIME:
             for a in cls.ARCS:
-                useTime = k+cls.epsilonTravel if cls.useEpsilon else k+a[A.DST]-1
+                useTime = min(k+a[A.DST]-1, cls.epsilonTravel) if cls.useEpsilon else k+a[A.DST]-1
                 travelWindow = range(k, min(useTime, cls.T))
                 prob += lpSum([[cls.X[a[A.SRC]][a[A.SNK]][t][k_win] for k_win in travelWindow] for t in cls.TASK]) <= cls.edgeCap
 
