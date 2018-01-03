@@ -26,7 +26,7 @@ class Arc:
     def __init__(self, start_node:int, end_node:int, length:int):
         self.start = start_node
         self.end = end_node
-        self.dist = int(np.divide(length, Arc.velocity))
+        self.dist = int(round(np.divide(length, Arc.velocity)))
 
     def __array__(self)->[]:
         return [self.start, self.end, self.dist]
