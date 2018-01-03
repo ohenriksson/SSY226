@@ -48,8 +48,8 @@ class AmplDataWriter:
         setup += self.setParameter('epsilon', str(ms.epsilon))
         setup += self.setParameter('taskLowerBound',str(ms.all_tasks))
         arcs = self.setParameter(': ARCS :TAU :', '\n'.join([str(a) for a in self.arcs]),True)
-        task_src = self.setParameter(':src_tasks :','\n'.join(t.printStart() for t in self.taskList),True)
-        task_snk = self.setParameter(':snk_tasks :', '\n'.join(t.printEnd() for t in self.taskList),True)
+        task_src = self.setParameter(':src_tasks :','\n'.join(t.print_start() for t in self.taskList), True)
+        task_snk = self.setParameter(':snk_tasks :', '\n'.join(t.print_end() for t in self.taskList), True)
         config = '\n'.join([setup,arcs,task_src,task_snk])
         self.print_to_file(filename,config)
 

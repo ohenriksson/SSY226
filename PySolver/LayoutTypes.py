@@ -2,10 +2,12 @@ from enum import Enum
 import numpy as np
 import modelspec as ms
 
+
 class Dist(Enum):
     Euclidian = 'eucl'
     Zero = 0
     Unit = 1
+
 
 class Node:
     counter = 0
@@ -35,14 +37,15 @@ class Arc:
 
 class Task:
     counter = 1
+
     def __init__(self, start_node:Node, end_node:Node):
         self.sNode = start_node
         self.eNode = end_node
         self.index = Task.counter
         Task.counter += 1
 
-    def printStart(self) -> str:
+    def print_start(self) -> str:
         return str(self.index) +' ' +str(self.sNode)
 
-    def printEnd(self) -> str:
+    def print_end(self) -> str:
         return str(self.index) +' ' +str(self.eNode)
