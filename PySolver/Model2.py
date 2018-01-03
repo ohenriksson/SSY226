@@ -54,7 +54,7 @@ class Model2:
 
 
     @classmethod
-    def init(cls):
+    def solve(cls):
         prob = LpProblem("Task Optimizer", LpMaximize)
         cls.objective_f(prob)
         cls.detector(prob)
