@@ -97,8 +97,8 @@ class ModelSpecParser:
 
     @classmethod
     def generateArcsBetween(cls, nodeLayer1:[Node], nodeLayer2:[Node], distance=Dist.Unit, bidirectional=False):
-        for n1 in nodeLayer1:
-            for n2 in nodeLayer2:
+        for i1,n1 in enumerate(nodeLayer1):
+            for (i2,n2) in enumerate(nodeLayer2):
                 if distance.value == Dist.Euclidian.value:
                     d = cls.getEuclidianDistance(i1, i2)
                 else: d = distance.value
@@ -106,10 +106,9 @@ class ModelSpecParser:
                 if bidirectional: cls.arcs.append(Arc(n2.number, n1.number, d))
 
     @staticmethod
-    def getEuclidianDistance(y1:Node,y2:Node) ->int:
-
+    def getEuclidianDistance(y1:int,y2:int) ->int:
         x = np.divide(ms.delivery_distance,(ms.intermidiate_layers+1))
-        y = np.abs(y1.number-y2.number)*ms.node_spacing_y
+        y = np.abs(y1-y2)*ms.node_spacing_y
         return int(round(np.hypot(x,y),0))
 
     @classmethod
