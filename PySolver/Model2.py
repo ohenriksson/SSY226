@@ -1,51 +1,57 @@
 from pulp import *
-import model1 as data
 from enum import IntEnum
-
+from DataTypes import ModelData as md
+import pickle
 
 class A(IntEnum):
     SRC = 0
     SNK = 1
     DST = 2
 
-
-def count_nodes(arcs):
-    highestnum = 0
-    for a in arcs:
-        if a[A.SNK] > highestnum:
-            highestnum = a[A.SNK]
-        elif a[A.SRC] > highestnum:
-            highestnum = a[A.SRC]
-    return highestnum+1
-
-
 class Model2:
-    epsilonTravel = data.epsilonTravel
-    useEpsilon = data.useEpsilon
 
-    startNode = data.startNode
-    endNode = data.endNode
-    travelTask = data.travelTask
-    taskLowerBound = data.taskLowerBound
-    nodeCap = data.nodeCap
-    edgeCap = data.edgeCap
-    T = data.T
-    agvMax = data.agv
+    @staticmethod
+    def count_nodes(arcs):
+        highestnum = 0
+        for a in arcs:
+            if a[A.SNK] > highestnum:
+                highestnum = a[A.SNK]
+            elif a[A.SRC] > highestnum:
+                highestnum = a[A.SRC]
+        return highestnum+1
 
-    snk_tasks = data.snk_tasks
-    src_tasks = data.src_tasks
+    @classmethod
+    def load(cls, modelName = 'model1.pickle'):
+        indata_pickle = open(modelName,'rb')
+        data = pickle.load(indata_pickle)
 
-    ARCS = data.arcs
-    TASK = range(snk_tasks.__len__())
-    TASKLIST = TASK[1:]
-    TIME = range(T)
+        cls.epsilonTravel = data[md.epsilonTravel]
+        cls.useEpsilon = data[md.useEpsilon]
 
-    NODES = range(count_nodes(ARCS))
-    INTER = NODES[1:-1]
+        cls.startNode = data[md.startNode]
+        cls.endNode = data[md.endNode]
+        cls.travelTask = data[md.travelTask]
+        cls.taskLowerBound = data[md.taskLowerBound]
+        cls.nodeCap = data[md.nodeCap]
+        cls.edgeCap = data[md.edgeCap]
+        cls.T = data[md.T]
+        cls.agvMax = data[md.agv]
 
-    Y = LpVariable.dicts('Y', (NODES, TASK, TIME), lowBound=0, cat=LpInteger)
-    X = LpVariable.dicts('X', (NODES, NODES, TASK, TIME), lowBound=0, upBound=edgeCap, cat=LpInteger)
-    AGVS = LpVariable('AGVS', lowBound=0, upBound=agvMax, cat=LpInteger)
+        cls.snk_tasks = data[md.snk_tasks]
+        cls.src_tasks = data[md.src_tasks]
+
+        cls.ARCS = data[md.arcs]
+        cls.TASK = range(cls.snk_tasks.__len__())
+        cls.TASKLIST = cls.TASK[1:]
+        cls.TIME = range(cls.T)
+
+        cls.NODES = range(cls.count_nodes(cls.ARCS))
+        cls.INTER = cls.NODES[1:-1]
+
+        cls.Y = LpVariable.dicts('Y', (cls.NODES, cls.TASK,cls.TIME), lowBound=0, cat=LpInteger)
+        cls.X = LpVariable.dicts('X', (cls.NODES, cls.NODES, cls.TASK, cls.TIME), lowBound=0, upBound=cls.edgeCap, cat=LpInteger)
+        cls.AGVS = LpVariable('AGVS', lowBound=0, upBound=cls.agvMax, cat=LpInteger)
+
 
     @classmethod
     def init(cls):
