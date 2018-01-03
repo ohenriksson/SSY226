@@ -46,8 +46,8 @@ class ModelSpecParser:
         data = {}
         data[md.epsilonTravel] = ms.epsilon
         data[md.useEpsilon] = ms.use_epsilon
-        data[md.startNode] = cls.masterSourceNode
-        data[md.endNode] = cls.masterSinkNode
+        data[md.startNode] = cls.masterSourceNode.number
+        data[md.endNode] = cls.masterSinkNode.number
         data[md.T] = cls.timeFrame
         data[md.agv] = ms.n_agvs
         data[md.taskLowerBound] = ms.all_tasks * ms.unique_tasks
@@ -63,8 +63,8 @@ class ModelSpecParser:
     def calculateTimeFrame(arcs:[Arc])->int:
         longestRoute = 0
         for arc in arcs:
-            if longestRoute < arc.dist: longestRoute = arc.dist
-        return int(longestRoute*ms.unique_tasks)
+            longestRoute = arc.dist if longestRoute < arc.dist else longestRoute
+        return int(longestRoute*ms.unique_tasks)*4
 
     @staticmethod
     def setParameter(parameter, value, newLine=False,):

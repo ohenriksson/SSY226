@@ -73,6 +73,7 @@ class Model2:
         for v in prob.variables():
             if v.varValue > 0:
                 print(v.name, "=", v.varValue)
+        print( "AGVS:", pulp.value(cls.AGVS))
         print( "Throughput :", pulp.value(prob.objective))
 
     @classmethod
@@ -156,10 +157,10 @@ class Model2:
         cls.agv_counter(prob)
 
     @classmethod
-    def agv_counter(cls,prob):
+    def agv_counter(cls, prob):
          startArcs = cls.arcs_starting_here(cls.startNode)
          endArcs = cls.arcs_ending_here(cls.endNode)
-         startSum = list(cls.X[a[A.SRC]][a[A.SNK]] for a in startArcs)
+         startSum = [cls.X[a[A.SRC]][a[A.SNK]] for a in startArcs]
          endSum = [cls.X[a[A.SRC]][a[A.SNK]] for a in endArcs]
          prob += lpSum(startSum) == lpSum(endSum), "agv restrictor"
          prob += lpSum(startSum) == cls.AGVS, "counter"
@@ -171,9 +172,9 @@ class Model2:
         return list(filter(lambda s: k-s[A.DST] >= 0, arcs))
 
     @classmethod
-    def arcs_ending_here(cls,v0)->[]:
+    def arcs_ending_here(cls,v0:int)->[]:
         return list(filter(lambda s: s[A.SNK] == v0, cls.ARCS))
 
     @classmethod
-    def arcs_starting_here(cls, v0, k=0)->[]:
-        return list(filter(lambda s: s[A.SRC] == v0 , cls.ARCS))
+    def arcs_starting_here(cls, v0:int, k=0)->[]:
+        return list(filter(lambda s: s[A.SRC] == v0, cls.ARCS))
