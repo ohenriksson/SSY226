@@ -79,8 +79,10 @@ class Model2:
             for v in prob.variables():
                 if v.varValue > 0:
                     print(v.name, "=", v.varValue)
-            print( "AGVS:", pulp.value(cls.AGVS))
-            print( "Throughput :", pulp.value(prob.objective))
+            print("AGVS: ", pulp.value(cls.AGVS))
+            print("Throughput: ", pulp.value(prob.objective))
+            print("Constraints: ", prob.constraints.__len__() )
+            print("Variables: ",prob.variables().__len__() )
 
     @classmethod
     def objective_f(cls, prob):
