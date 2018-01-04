@@ -5,11 +5,6 @@ from AmplDataWriter import AmplDataWriter
 adw = AmplDataWriter(True)
 adw.writeDatFile("testFile.dat")
 
-
-
-# ( solve the model inside python )
-# run ampl script
-
 # read and print the results
 #amplOut = '/home/oskar/Desktop/Xsol.out'
 #AOR = AmplOutputReader(amplOut)

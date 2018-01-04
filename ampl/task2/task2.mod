@@ -58,8 +58,8 @@ n != src_tasks[t] and n != snk_tasks[t] }:  Y[n,t,k] = sum {(n,j) in ARCS} X[n,j
 taskMustBeDropped {k in TIME, t in TASKLIST, n in INTER: n == snk_tasks[t]}:
 sum {(n,j) in ARCS} X[n,j,t,k] = 0;
 
-travelling {k in TIME, t in TASKLIST, n in INTER: n == snk_tasks[t]}:
-sum {(n,j) in ARCS, t2 in TASKLIST: n != src_tasks[t2]} X[n,j,t2,k] = 0;
+#travelling {k in TIME, t in TASKLIST, n in INTER: n == snk_tasks[t]}:
+#sum {(n,j) in ARCS, t2 in TASKLIST: n != src_tasks[t2]} X[n,j,t2,k] = 0;
 
 # --agvs in the intermediate nodes at t=0
 # nAGVs_interStart: sum{t in TASK, i in INTER} Y[i,t,0] = 0;
