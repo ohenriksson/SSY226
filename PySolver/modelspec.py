@@ -11,13 +11,13 @@
 #   o                               [ ]
 #   o
 
-pickup_stations = 5 #(integer)
-place_stations = 3 #(integer)
+pickup_stations = 10 #(integer)
+place_stations = 10 #(integer)
 delivery_distance = 4 #(integer) [m] distance in x direction (euclidian distances will be computed)
 grid_layout = True #(True/False) arcs are only connected to neighbouring nodes
 
 # --- Optimization Specifications
-n_agvs = 3 #(integer) max amount of agvs
+n_agvs = 2 #(integer) max amount of agvs
 agv_velocity = 1 #(integer) [m/s]
 
 
@@ -31,5 +31,5 @@ edge_capacity = 1 #[only affects when use_epsilon is false] number of AGVs on th
 node_capacity = 1 #how many AGVs that can enter a node at the same time.
 epsilon = 1 #number of time units one agv occupies an arc
 use_epsilon = False #use epsilon, otherwise arc is occupied for the complete travel distance
-all_tasks = 1 #number of times all tasks at least should be done
-timeframe = delivery_distance*10 #optimization timeframe(does not affect trhoughput)
+all_tasks = 0 #number of times all tasks at least should be done
+timeframe = 100 #delivery_distance*10 #optimization timeframe(does not affect trhoughput)
