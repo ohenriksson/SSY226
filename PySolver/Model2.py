@@ -61,7 +61,7 @@ class Model2:
         cls.detector(prob)
         cls.prevent_early_start(prob)
         cls.inflow_outflow(prob)
-        #cls.task_travel(prob)
+        #cls.task_travel(prob) #no effect
         cls.arctravel_capacity(prob)
         cls.tasks_must_go_on(prob)
         cls.tasks_must_be_dropped(prob)

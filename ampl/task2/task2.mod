@@ -40,7 +40,7 @@ maximize obj_fun: sum{k in TIME, tsk in TASKLIST} Y[snk_tasks[tsk], tsk ,k] / T;
 #---CONSTRAINTS
 s.t.
 detector {k in TIME, t in TASK, v0 in NODES}: sum{(i,v0) in ARCS: k-TAU[i,v0] >=0} X[i,v0,t,k-TAU[i,v0]] = Y[v0,t,k];
-#preventEarlyStart {k in TIME, (i,j) in ARCS, t in TASK :k-TAU[i,j] < 0}: Y[j,t,k] = 0;
+preventEarlyStart {k in TIME, (i,j) in ARCS, t in TASK :k-TAU[i,j] < 0}: Y[j,t,k] = 0;
 
 
 #--inflow = outflow
