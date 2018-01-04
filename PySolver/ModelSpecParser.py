@@ -21,7 +21,7 @@ class ModelSpecParser:
         cls.generateNodes()
         cls.generateArcs()
         cls.createAllTasks()
-        cls.timeFrame = cls.calculateTimeFrame(cls.arcs)
+        cls.timeFrame = ms.timeframe
         cls.savePickle(cls.generateDataStruct(), pickle_name)
         return
 
@@ -58,13 +58,6 @@ class ModelSpecParser:
         data[md.src_tasks] = [t.sNode for t in cls.taskList]
         data[md.arcs] = [a.__array__() for a in cls.arcs]
         return data
-
-    @staticmethod
-    def calculateTimeFrame(arcs:[Arc])->int:
-        longestRoute = 0
-        for arc in arcs:
-            longestRoute = arc.dist if longestRoute < arc.dist else longestRoute
-        return int(longestRoute*ms.unique_tasks)
 
     @staticmethod
     def setParameter(parameter, value, newLine=False,):

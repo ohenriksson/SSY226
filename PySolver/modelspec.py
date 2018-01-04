@@ -32,3 +32,4 @@ node_capacity = 1 #how many AGVs that can enter a node at the same time.
 epsilon = 1 #number of time units one agv occupies an arc
 use_epsilon = False #use epsilon, otherwise arc is occupied for the complete travel distance
 all_tasks = 1 #number of times all tasks at least should be done
+timeframe = delivery_distance*20 #optimization timeframe(does not affect trhoughput)

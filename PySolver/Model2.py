@@ -72,11 +72,15 @@ class Model2:
         prob.writeLP("MinmaxProblem.lp")
         prob.solve()
 
-        for v in prob.variables():
-            if v.varValue > 0:
-                print(v.name, "=", v.varValue)
-        print( "AGVS:", pulp.value(cls.AGVS))
-        print( "Throughput :", pulp.value(prob.objective))
+
+        if prob.status != pulp.LpStatusOptimal:
+            print('FAILED: ', pulp.LpStatus[prob.status])
+        else:
+            for v in prob.variables():
+                if v.varValue > 0:
+                    print(v.name, "=", v.varValue)
+            print( "AGVS:", pulp.value(cls.AGVS))
+            print( "Throughput :", pulp.value(prob.objective))
 
     @classmethod
     def objective_f(cls, prob):
@@ -164,10 +168,11 @@ class Model2:
                 prob += lpSum([cls.Y[v0][t][k] for t in cls.TASK]) <= cls.nodeCap
     @classmethod
     def edge_capacity(cls, prob):
-        for a in cls.ARCS:
-            for k in cls.TIME:
-                for t in cls.TASK:
-                        prob += cls.X[a[A.SRC]][a[A.SNK]][t][k] <= cls.edgeCap
+        for src in cls.X:
+            for snk in cls.X[src]:
+                for t in cls.X[src][snk]:
+                    for k in cls.X[src][snk][t]:
+                        prob += cls.X[src][snk][t][k] <= cls.edgeCap
 
 
     @classmethod
