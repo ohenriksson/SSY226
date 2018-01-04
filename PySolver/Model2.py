@@ -50,7 +50,7 @@ class Model2:
         cls.INTER = cls.NODES[1:-1]
 
         cls.Y = LpVariable.dicts('Y', (cls.NODES, cls.TASK,cls.TIME), lowBound=0, cat=LpInteger)
-        cls.X = LpVariable.dicts('X', (cls.NODES, cls.NODES, cls.TASK, cls.TIME), lowBound=0, upBound=cls.edgeCap, cat=LpInteger)
+        cls.X = LpVariable.dicts('X', (cls.NODES, cls.NODES, cls.TASK, cls.TIME), lowBound=0, cat=LpInteger)
         cls.AGVS = LpVariable('AGVS', lowBound=0, upBound=cls.agvMax, cat=LpInteger)
 
 
@@ -64,6 +64,7 @@ class Model2:
         cls.tasks_must_go_on(prob)
         cls.tasks_must_be_dropped(prob)
         cls.node_capacity(prob)
+        cls.edge_capacity(prob)
         cls.tasks_lower_bound(prob)
         cls.start_node_task(prob) #does not seem to restrict further
         cls.agv_number_restrictions(prob)
@@ -94,19 +95,25 @@ class Model2:
                    arcs = cls.arcs_ending_at(v0, k)
                    label = 'detector_' +str(k) + '_' +str(t) +'_' +str(v0)
                    incoming = [cls.X[a[A.SRC]][v0][t][k-a[A.DST]] for a in arcs]
-                   if incoming.__len__() > 0:
-                       prob += lpSum(incoming) == cls.Y[v0][t][k]
+                   if incoming.__len__() == 0:
+                       incoming = [0]
+                   prob += lpSum(incoming) == cls.Y[v0][t][k], label
 
 
     @classmethod
     def inflow_outflow(cls, prob):
         for k in cls.TIME:
             for v0 in cls.INTER:
+                label = 'inout_flow_' +str(k) + '_' +str(v0)
                 arcsIn = cls.arcs_ending_at(v0, k)
                 arcsOut = cls.arcs_starting_here(v0, k)
-                inArcs = [[ cls.X[a[A.SRC]][a[A.SNK]][t][k-a[A.DST]] for t in cls.TASK] for a in arcsIn]
-                outArcs =[[ cls.X[a[A.SRC]][a[A.SNK]][t][k] for t in cls.TASK] for a in arcsOut]
-                prob += lpSum(inArcs) == lpSum(outArcs)
+                in_arcs = [[ cls.X[a[A.SRC]][a[A.SNK]][t][k-a[A.DST]] for t in cls.TASK] for a in arcsIn]
+                out_arcs =[[ cls.X[a[A.SRC]][a[A.SNK]][t][k] for t in cls.TASK] for a in arcsOut]
+                if in_arcs.__len__() == 0:
+                    in_arcs = [0]
+                if out_arcs.__len__() == 0:
+                    out_arcs = [0]
+                prob += lpSum(in_arcs) == lpSum(out_arcs), label
 
 
     @classmethod
@@ -117,7 +124,9 @@ class Model2:
                 travelWindow = range(k, min(useTime, cls.T))
                 if travelWindow.__len__() > 0:
                     arcWindow = [[cls.X[a[A.SRC]][a[A.SNK]][t][k_win] for k_win in travelWindow] for t in cls.TASK]
-                    prob += lpSum(arcWindow) <= cls.edgeCap
+                    if arcWindow.__len__() == 0:
+                        arcWindow = [0]
+                    prob += lpSum(arcWindow) <= cls.edgeCap, "arctravel_" +str(k) +'_' +str(a)
 
 
     @classmethod
@@ -126,7 +135,10 @@ class Model2:
             for t in cls.TASKLIST:
                 for v0 in list(filter(lambda v: v != cls.src_tasks[t] and v != cls.snk_tasks[t], cls.INTER)):
                     arcsOut = cls.arcs_starting_here(v0, k)
-                    prob += cls.Y[v0][t][k] == lpSum([ cls.X[a[A.SRC]][a[A.SNK]][t][k] for a in arcsOut])
+                    arcsum = [ cls.X[a[A.SRC]][a[A.SNK]][t][k] for a in arcsOut]
+                    if arcsum.__len__() == 0:
+                        arcsum = [0]
+                    prob += cls.Y[v0][t][k] == lpSum(arcsum), 'tasks_go_on_' +str(k) +'_' +str(t) + '_' +str(v0)
 
     @classmethod
     def tasks_must_be_dropped(cls, prob):
@@ -134,7 +146,10 @@ class Model2:
             for t in cls.TASKLIST:
                 for v0 in list(filter(lambda v: v == cls.snk_tasks[t], cls.INTER)):
                     arcsOut = cls.arcs_starting_here(v0)
-                    prob += lpSum([cls.X[a[A.SRC]][v0][t][k] for a in arcsOut]) == 0
+                    arcsum = [cls.X[a[A.SRC]][v0][t][k] for a in arcsOut]
+                    if arcsum.__len__() == 0:
+                        arcsum = [0]
+                    prob += lpSum(arcsum) == 0, 'tasks_dropped_' +str(k) +'_' +str(t) + '_' +str(v0)
 
     @classmethod
     def tasks_lower_bound(cls, prob):
@@ -143,10 +158,17 @@ class Model2:
             prob += lpSum(taskSum) >= cls.taskLowerBound
 
     @classmethod
-    def node_capacity(cls,prob):
+    def node_capacity(cls, prob):
         for k in cls.TIME:
             for v0 in cls.INTER:
                 prob += lpSum([cls.Y[v0][t][k] for t in cls.TASK]) <= cls.nodeCap
+    @classmethod
+    def edge_capacity(cls, prob):
+        for a in cls.ARCS:
+            for k in cls.TIME:
+                for t in cls.TASK:
+                        prob += cls.X[a[A.SRC]][a[A.SNK]][t][k] <= cls.edgeCap
+
 
     @classmethod
     def start_node_task(cls, prob):

@@ -5,8 +5,8 @@ import time
 
 pickle_file = 'model1.pickle'
 
-print('Generating layout...')
-ModelSpecParser.parse(pickle_file) #generate a pickle file and store it
+# print('Generating layout...')
+# ModelSpecParser.parse(pickle_file) #generate a pickle file and store it
 
 print('Parsing pickled data...')
 Model2.load(pickle_file) #load pickle file and the dataset
