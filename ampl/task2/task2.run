@@ -1,6 +1,6 @@
 reset;
 option solver cplex;
-option cplex_options 'absmipgap=2e-3';
+option cplex_options 'absmipgap=2e-1';
 
 model task2.mod;
 data testFile.dat;

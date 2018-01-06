@@ -30,17 +30,32 @@ CPLEX 12.7.1.0: optimal integer solution; objective 0.1857142857
 absmipgap = 2.77556e-17, relmipgap = 1.49453e-16
 
 param T = 60;
-CPLEX 12.7.1.0: optimal integer solution; objective 0.1833333333
-84064 MIP simplex iterations
+CPLEX 12.7.1.0: absmipgap=2e-1
+CPLEX 12.7.1.0: integer infeasible.
+19273 MIP simplex iterations
+0 branch-and-bound nodes
+No basis.
+_solve_elapsed_time = 627.744
+
+_nvars = 708577
+
+_ncons = 99778
 
 param T = 50;
 CPLEX 12.7.1.0: integer infeasible.
 56826 MIP simplex iterations
 
 param T = 36:
-27999 MIP simplex iteration
-Not feasible (task lower bound violated)
+CPLEX 12.7.1.0: absmipgap=2e-3
+CPLEX 12.7.1.0: integer infeasible.
+48570 MIP simplex iterations
+0 branch-and-bound nodes
+No basis.
+_solve_elapsed_time = 60.0893
 
+_nvars = 429793
+
+_ncons = 72240
 
 
 

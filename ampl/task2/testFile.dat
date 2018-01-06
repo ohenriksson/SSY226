@@ -1,5 +1,5 @@
 #pickupNodes:10 interNodes:10 placeNodes:10
-param T=36;
+param T=70;
 param startNode = 0;
 param endNode = 31;
 param nrAGVs = 2;
