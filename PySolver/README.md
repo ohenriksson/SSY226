@@ -1,5 +1,9 @@
-Python 3.5.4
 
 Run the solver: `$python3 InitSolv.py`
 
-The solver utilizes pulp, example: http://pythonhosted.org/PuLP/CaseStudies/a_sudoku_problem.html
+# Requirements
+* Python 3.5.4
+* PuLP 1.6.8  `sudo pip3 install pulp`
+
+PuLP example: http://pythonhosted.org/PuLP/CaseStudies/a_sudoku_problem.html
+
