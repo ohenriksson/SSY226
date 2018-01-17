@@ -38,13 +38,13 @@ class Model2:
         cls.T = data[md.T]
         cls.agvMax = data[md.agv]
 
-        cls.snk_tasks = data[md.snk_tasks]
-        cls.src_tasks = data[md.src_tasks]
+        cls.snk_tasks = [0] + data[md.snk_tasks]
+        cls.src_tasks = [0] + data[md.src_tasks]
 
         cls.ARCS = data[md.arcs]
         cls.TASK = range(cls.snk_tasks.__len__())
         cls.TASKLIST = cls.TASK[1:]
-        cls.TIME = range(cls.T)
+        cls.TIME = range(cls.T+1)
 
         cls.NODES = range(cls.count_nodes(cls.ARCS))
         cls.INTER = cls.NODES[1:-1]
@@ -59,7 +59,7 @@ class Model2:
         prob = LpProblem("Task Optimizer", LpMaximize)
         cls.objective_f(prob)
         cls.detector(prob)
-        cls.prevent_early_start(prob)
+        #cls.prevent_early_start(prob)
         cls.inflow_outflow(prob)
         #cls.task_travel(prob) #no effect
         cls.arctravel_capacity(prob)
@@ -168,7 +168,7 @@ class Model2:
             for t in cls.TASKLIST:
                 for v0 in list(filter(lambda v: v == cls.snk_tasks[t], cls.INTER)):
                     arcsOut = cls.arcs_starting_here(v0)
-                    arcsum = [cls.X[a[A.SRC]][v0][t][k] for a in arcsOut]
+                    arcsum = [cls.X[v0][a[A.SNK]][t][k] for a in arcsOut]
                     if arcsum.__len__() == 0: arcsum = [0]
                     prob += lpSum(arcsum) == 0, 'tasks_dropped_' +str(k) +'_' +str(t) + '_' +str(v0)
 
