@@ -176,7 +176,7 @@ class Model2:
     def tasks_lower_bound(cls, prob):
         for t in cls.TASKLIST:
             taskSum = [cls.Y[cls.snk_tasks[t]][t][k] for k in cls.TIME]
-            prob += lpSum(taskSum) >= cls.taskLowerBound
+            prob += lpSum(taskSum) >= cls.taskLowerBound, "task_lower_bound_" + str(t)
 
     @classmethod
     def node_capacity(cls, prob):

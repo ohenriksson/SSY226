@@ -50,7 +50,7 @@ class ModelSpecParser:
         data[md.endNode] = cls.masterSinkNode.number
         data[md.T] = cls.timeFrame
         data[md.agv] = ms.n_agvs
-        data[md.taskLowerBound] = ms.all_tasks * ms.unique_tasks
+        data[md.taskLowerBound] = ms.all_tasks
         data[md.nodeCap] = ms.node_capacity
         data[md.edgeCap] = ms.edge_capacity
         data[md.travelTask] = 0
